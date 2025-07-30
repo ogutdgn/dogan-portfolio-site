@@ -25,10 +25,10 @@ export default function Contact() {
 
   const contactInfo = [
     {
-      icon: <Mail className="h-6 w-6 text-primary" />, 
+      icon: Mail,
       title: "Email",
-      value: "ogutdgn@gmail.com",
-      link: "mailto:ogutdgn@gmail.com",
+      value: "contactdgn@ogutdgn.com",
+      link: "mailto:contactdgn@ogutdgn.com",
     },
     {
       icon: <Phone className="h-6 w-6 text-primary" />, 
@@ -59,7 +59,9 @@ export default function Contact() {
               {contactInfo.map((info, index) => (
                 <div key={index} className="bg-card border border-border rounded-lg p-6">
                   <div className="flex items-start gap-4">
-                    <div className="bg-primary/10 p-3 rounded-full">{info.icon}</div>
+                    <div className="bg-primary/10 p-3 rounded-full">
+                      <Mail className="h-6 w-6 text-primary" />
+                    </div>
                     <div>
                       <h4 className="text-lg font-semibold mb-1">{info.title}</h4>
                       {info.link ? (
@@ -94,7 +96,7 @@ export default function Contact() {
                     <Linkedin className="h-5 w-5" />
                   </a>
                   <a
-                    href="mailto:ogutdgn@gmail.com"
+                    href="mailto:contactdgn@ogutdgn.com"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="p-3 border border-border rounded-full hover:bg-muted transition-colors"

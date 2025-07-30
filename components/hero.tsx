@@ -103,7 +103,7 @@ export default function Hero() {
                 <Linkedin className="h-5 w-5" />
               </a>
               <a
-                href="mailto:ogutdgn@gmail.com"
+                href="mailto:contactdgn@ogutdgn.com"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="p-3 rounded-full hover:bg-muted transition-colors"

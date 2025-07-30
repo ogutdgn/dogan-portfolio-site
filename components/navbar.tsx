@@ -102,7 +102,7 @@ export default function Navbar() {
   const socialLinks = [
     { name: "GitHub", href: "https://github.com/ogutdgn", icon: Github },
     { name: "LinkedIn", href: "https://www.linkedin.com/in/doganogut/", icon: Linkedin },
-    { name: "Email", href: "mailto:ogutdgn@gmail.com", icon: Mail },
+    { name: "Email", href: "mailto:contactdgn@ogutdgn.com", icon: Mail },
   ]
 
   // Don't render mobile sidebar until mounted to prevent hydration mismatch
