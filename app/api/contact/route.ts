@@ -28,11 +28,11 @@ export async function POST(request: NextRequest) {
 
     // Send email
     const { data, error } = await resend.emails.send({
-      from: 'Portfolio Contact <onboarding@resend.dev>', // Resend test email
-      to: [process.env.CONTACT_EMAIL || 'your-email@example.com'],
+      from: 'Portfolio Contact <noreply@ogutdgn.com>', // email sender
+      to: [process.env.CONTACT_EMAIL || 'contactdgn@ogutdgn.com'],
       subject: `Portfolio Contact: ${subject}`,
       react: ContactFormEmail({ name, email, subject, message }),
-      replyTo: email, // Kullanıcının email'ine reply yapabilmek için
+      replyTo: email, // Reply to the user's email
     });
 
     if (error) {
