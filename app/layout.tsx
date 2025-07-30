@@ -9,6 +9,10 @@ const inter = Inter({ subsets: ["latin"] })
 export const metadata: Metadata = {
   title: "Dogan Ogut | Portfolio",
   description: "Professional portfolio of Dogan Ogut - Software Developer",
+  icons: {
+    icon: '/favicon.svg',
+    apple: '/favicon.svg',
+  },
 }
 
 export default function RootLayout({
