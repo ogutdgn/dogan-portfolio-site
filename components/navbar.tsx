@@ -3,6 +3,12 @@
 import { useState, useEffect } from "react"
 import { Menu, X, Github, Linkedin, Mail } from "lucide-react"
 
+interface NavLink {
+  name: string
+  href: string
+  external?: boolean
+}
+
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false)
   const [isAnimating, setIsAnimating] = useState(false)
@@ -60,9 +66,9 @@ export default function Navbar() {
         const startPosition = window.pageYOffset
         const distance = offsetTop - startPosition
         const duration = 1200
-        let start = null
+        let start: number | null = null
 
-        function animation(currentTime) {
+        const animation = (currentTime: number) => {
           if (start === null) start = currentTime
           const timeElapsed = currentTime - start
           const run = ease(timeElapsed, startPosition, distance, duration)
@@ -70,7 +76,7 @@ export default function Navbar() {
           if (timeElapsed < duration) requestAnimationFrame(animation)
         }
 
-        function ease(t, b, c, d) {
+        const ease = (t: number, b: number, c: number, d: number): number => {
           t /= d / 2
           if (t < 1) return (c / 2) * t * t + b
           t--
@@ -82,7 +88,7 @@ export default function Navbar() {
     }, 300)
   }
 
-  const navLinks = [
+  const navLinks: NavLink[] = [
     { name: "Home", href: "home" },
     { name: "About", href: "about" },
     { name: "Education", href: "education" },
@@ -90,6 +96,7 @@ export default function Navbar() {
     { name: "Projects", href: "projects" },
     { name: "Blogs", href: "blogs" },
     { name: "Contact", href: "contact" },
+    { name: "Resume", href: "/dogan-ogut-resume.pdf", external: true },
   ]
 
   const socialLinks = [
@@ -149,18 +156,30 @@ export default function Navbar() {
           </button>
 
           <nav className="hidden lg:flex items-center space-x-8">
-            {navLinks.map((link) => (
-              <button
-                key={link.name}
-                onClick={() => scrollToSection(link.href)}
-                className="text-muted-foreground hover:text-foreground transition-colors whitespace-nowrap"
-              >
-                {link.name}
-              </button>
-            ))}
-            <button className="bg-primary text-primary-foreground px-4 py-2 rounded-md hover:bg-primary/90 transition-colors whitespace-nowrap">
-              Resume
-            </button>
+            {navLinks.map((link) => {
+              if (link.external) {
+                return (
+                  <a
+                    key={link.name}
+                    href={link.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="bg-primary text-primary-foreground px-4 py-2 rounded-md hover:bg-primary/90 transition-colors whitespace-nowrap"
+                  >
+                    {link.name}
+                  </a>
+                )
+              }
+              return (
+                <button
+                  key={link.name}
+                  onClick={() => scrollToSection(link.href)}
+                  className="text-muted-foreground hover:text-foreground transition-colors whitespace-nowrap"
+                >
+                  {link.name}
+                </button>
+              )
+            })}
           </nav>
 
           <button
@@ -194,30 +213,41 @@ export default function Navbar() {
 
                 <nav className="flex-1 p-6 bg-background">
                   <div className="space-y-2">
-                    {navLinks.map((link, index) => (
-                      <button
-                        key={link.name}
-                        onClick={() => scrollToSection(link.href)}
-                        className={`block w-full text-left py-4 px-4 rounded-lg text-muted-foreground hover:text-foreground hover:bg-muted transition-all duration-300 text-lg transform ${
-                          isOpen ? "translate-x-0 opacity-100" : "translate-x-8 opacity-0"
-                        }`}
-                        style={{
-                          transitionDelay: isOpen ? `${index * 50 + 200}ms` : "0ms",
-                        }}
-                      >
-                        {link.name}
-                      </button>
-                    ))}
-                    <button
-                      className={`w-full mt-6 bg-primary text-primary-foreground px-4 py-3 rounded-lg hover:bg-primary/90 transition-all duration-300 text-lg font-medium transform ${
-                        isOpen ? "translate-x-0 opacity-100" : "translate-x-8 opacity-0"
-                      }`}
-                      style={{
-                        transitionDelay: isOpen ? `${navLinks.length * 50 + 200}ms` : "0ms",
-                      }}
-                    >
-                      Resume
-                    </button>
+                    {navLinks.map((link, index) => {
+                      if (link.external) {
+                        return (
+                          <a
+                            key={link.name}
+                            href={link.href}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            onClick={closeMenu}
+                            className={`block w-full mt-6 bg-primary text-primary-foreground px-4 py-3 rounded-lg hover:bg-primary/90 transition-all duration-300 text-lg font-medium transform text-center ${
+                              isOpen ? "translate-x-0 opacity-100" : "translate-x-8 opacity-0"
+                            }`}
+                            style={{
+                              transitionDelay: isOpen ? `${index * 50 + 200}ms` : "0ms",
+                            }}
+                          >
+                            {link.name}
+                          </a>
+                        )
+                      }
+                      return (
+                        <button
+                          key={link.name}
+                          onClick={() => scrollToSection(link.href)}
+                          className={`block w-full text-left py-4 px-4 rounded-lg text-muted-foreground hover:text-foreground hover:bg-muted transition-all duration-300 text-lg transform ${
+                            isOpen ? "translate-x-0 opacity-100" : "translate-x-8 opacity-0"
+                          }`}
+                          style={{
+                            transitionDelay: isOpen ? `${index * 50 + 200}ms` : "0ms",
+                          }}
+                        >
+                          {link.name}
+                        </button>
+                      )
+                    })}
                   </div>
                 </nav>
 

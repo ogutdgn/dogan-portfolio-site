@@ -1,10 +1,19 @@
 "use client"
 
-import { useState } from "react"
-import { ArrowLeft, Search, Calendar, Filter } from "lucide-react"
+import { useState, useEffect, useMemo } from "react"
+import { ClipLoader } from "react-spinners"
+import { urlForImage } from "@/lib/sanity.image"
+import { getProjects } from "@/lib/sanity.queries"
+import { ArrowLeft, Search, Calendar, Filter, Github, ExternalLink } from "lucide-react"
+import FilterDropdown from "@/components/ui/filter-dropdown"
 
-// Navigation Toggle Component
-function NavigationToggle({ activeTab, onTabChange }) {
+interface NavigationToggleProps {
+  activeTab: string
+  onTabChange: (tab: string) => void
+}
+
+
+function NavigationToggle({ activeTab, onTabChange }: NavigationToggleProps) {
   return (
     <div className="flex items-center bg-muted rounded-lg p-1">
       <button
@@ -31,89 +40,55 @@ function NavigationToggle({ activeTab, onTabChange }) {
   )
 }
 
+interface Project {
+  _id: string
+  title: string
+  slug: string
+  overview: string
+  image: any
+  technologies: string[]
+  projectType: string
+  mainCategory: string
+  tags: string[]
+  githubLink?: string
+  publishedAt?: string
+  _createdAt: string
+  liveLink?: string
+}
+
 export default function ProjectsPage() {
   const [searchTerm, setSearchTerm] = useState("")
   const [selectedCategory, setSelectedCategory] = useState("All")
   const [activeTab, setActiveTab] = useState("projects")
+  const [projects, setProjects] = useState<Project[]>([])
+  const [loading, setLoading] = useState(true)
 
-  const projects = [
-    {
-      id: 1,
-      title: "E-Commerce Platform",
-      excerpt:
-        "A full-featured e-commerce platform with product management, cart functionality, and payment processing.",
-      date: "2024-01-20",
-      category: "Web Development",
-      image: "/placeholder.svg?height=300&width=500&text=E-Commerce+Platform",
-      slug: "ecommerce-platform",
-      tags: ["C++", "Qt", "SQLite", "CMake"],
-    },
-    {
-      id: 2,
-      title: "Task Management System",
-      excerpt: "A collaborative task management application with real-time updates and team workspaces.",
-      date: "2024-01-15",
-      category: "Web Application",
-      image: "/placeholder.svg?height=300&width=500&text=Task+Management",
-      slug: "task-management-system",
-      tags: ["Java", "Spring Boot", "React", "PostgreSQL"],
-    },
-    {
-      id: 3,
-      title: "System Resource Monitor",
-      excerpt: "A comprehensive system monitoring tool with real-time analytics and performance tracking.",
-      date: "2024-01-10",
-      category: "Systems Programming",
-      image: "/placeholder.svg?height=300&width=500&text=System+Monitor",
-      slug: "system-resource-monitor",
-      tags: ["C++", "Python", "Qt", "Linux"],
-    },
-    {
-      id: 4,
-      title: "Compiler Design Project",
-      excerpt: "A custom programming language compiler with advanced optimization features.",
-      date: "2024-01-05",
-      category: "Systems Programming",
-      image: "/placeholder.svg?height=300&width=500&text=Compiler+Design",
-      slug: "compiler-design-project",
-      tags: ["C", "LLVM", "Assembly", "Python"],
-    },
-    {
-      id: 5,
-      title: "Distributed Database System",
-      excerpt: "A distributed database system with high availability and fault tolerance.",
-      date: "2023-12-30",
-      category: "Database",
-      image: "/placeholder.svg?height=300&width=500&text=Distributed+DB",
-      slug: "distributed-database-system",
-      tags: ["C++", "Rust", "gRPC", "Redis"],
-    },
-    {
-      id: 6,
-      title: "Neural Network Framework",
-      excerpt: "A deep learning framework with CUDA acceleration and optimization features.",
-      date: "2023-12-25",
-      category: "Machine Learning",
-      image: "/placeholder.svg?height=300&width=500&text=Neural+Network",
-      slug: "neural-network-framework",
-      tags: ["C++", "CUDA", "Python", "CMake"],
-    },
-  ]
+  useEffect(() => {
+    async function fetchProjects() {
+      try {
+        const fetchedProjects = await getProjects()
+        console.log("Fetched projects:", fetchedProjects)
+        setProjects(fetchedProjects)
+        setLoading(false)
+      } catch (error) {
+        console.error('Error fetching projects:', error)
+        setLoading(false)
+      }
+    }
+    fetchProjects()
+  }, [])
 
-  const categories = [
-    "All",
-    "Web Development",
-    "Web Application",
-    "Systems Programming",
-    "Database",
-    "Machine Learning",
-  ]
+  const categories = useMemo(() => {
+    const mainCategories = projects.map(project => project.mainCategory).filter(Boolean)
+    const uniqueCategories = Array.from(new Set(mainCategories))
+    return ["All", ...uniqueCategories]
+  }, [projects])
 
   const filteredProjects = projects.filter((project) => {
     const matchesSearch =
       project.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      project.excerpt.toLowerCase().includes(searchTerm.toLowerCase())
-    const matchesCategory = selectedCategory === "All" || project.category === selectedCategory
+      project.overview.toLowerCase().includes(searchTerm.toLowerCase())
+    const matchesCategory = selectedCategory === "All" || project.mainCategory === selectedCategory
     return matchesSearch && matchesCategory
   })
 
@@ -178,20 +153,13 @@ export default function ProjectsPage() {
                 className="w-full pl-10 pr-4 py-3 border border-border rounded-lg bg-background focus:outline-none focus:ring-2 focus:ring-primary"
               />
             </div>
-            <div className="relative">
-              <Filter className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-muted-foreground" />
-              <select
-                value={selectedCategory}
-                onChange={(e) => setSelectedCategory(e.target.value)}
-                className="pl-10 pr-8 py-3 border border-border rounded-lg bg-background focus:outline-none focus:ring-2 focus:ring-primary appearance-none cursor-pointer"
-              >
-                {categories.map((category) => (
-                  <option key={category} value={category}>
-                    {category}
-                  </option>
-                ))}
-              </select>
-            </div>
+            <FilterDropdown
+              options={categories}
+              value={selectedCategory}
+              onChange={setSelectedCategory}
+              placeholder="Filter by category"
+              icon={<Filter className="h-5 w-5" />}
+            />
           </div>
 
           <p className="text-muted-foreground">
@@ -199,47 +167,102 @@ export default function ProjectsPage() {
           </p>
         </div>
 
-        {/* Projects Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {filteredProjects.map((project) => (
-            <div
-              key={project.id}
-              className="group bg-card border border-border rounded-lg overflow-hidden cursor-pointer transition-all duration-300 hover:shadow-xl hover:scale-[1.02]"
-              onClick={() => handleProjectClick(project.slug)}
-            >
-              <div className="relative overflow-hidden">
-                <img
-                  src={project.image || "/placeholder.svg"}
-                  alt={project.title}
-                  className="w-full aspect-video object-cover transition-transform duration-300 group-hover:scale-105"
-                />
-                <div className="absolute top-4 left-4">
-                  <span className="px-3 py-1 bg-primary text-primary-foreground text-xs rounded-full">
-                    {project.category}
-                  </span>
-                </div>
-              </div>
-
-              <div className="p-6">
-                <div className="flex items-center gap-2 text-sm text-muted-foreground mb-3">
-                  <Calendar className="h-4 w-4" />
-                  <span>{new Date(project.date).toLocaleDateString()}</span>
-                </div>
-
-                <h3 className="text-xl font-bold mb-3 group-hover:text-primary transition-colors">{project.title}</h3>
-                <p className="text-muted-foreground text-sm mb-4">{project.excerpt}</p>
-
-                <div className="flex flex-wrap gap-2">
-                  {project.tags.map((tag, i) => (
-                    <span key={i} className="px-2 py-1 bg-secondary text-secondary-foreground rounded text-xs">
-                      {tag}
-                    </span>
-                  ))}
-                </div>
-              </div>
+        {loading ? (
+          <div className="text-center py-12">
+            <div className="flex justify-center">
+              <ClipLoader color="#6366f1" size={60} speedMultiplier={0.8} />
             </div>
-          ))}
-        </div>
+          </div>
+        ) : projects.length === 0 ? (
+          <div className="text-center py-12">
+            <p className="text-muted-foreground text-lg">There are no projects available at the moment.</p>
+          </div>
+        ) : filteredProjects.length === 0 ? (
+          <div className="text-center py-12">
+            <p className="text-muted-foreground text-lg">No projects found matching your search criteria.</p>
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {filteredProjects.map((project) => (
+              <div
+                key={project._id}
+                className="group bg-card border border-border rounded-lg overflow-hidden cursor-pointer transition-all duration-300 hover:shadow-xl hover:scale-[1.02]"
+                onClick={() => handleProjectClick(project.slug)}
+              >
+                <div className="relative overflow-hidden">
+                  <img
+                    src={project.image ? urlForImage(project.image).url() : "/placeholder.jpg"}
+                    alt={project.title}
+                    className="w-full h-48 object-cover transition-transform duration-500 group-hover:scale-105"
+                  />
+                  <div className="absolute top-4 left-4">
+                    <span className="px-3 py-1 bg-primary text-primary-foreground text-xs rounded-full">
+                      {project.mainCategory || project.projectType || "Project"}
+                    </span>
+                  </div>
+                </div>
+
+                <div className="p-6">
+                  <div className="flex items-center gap-2 text-sm text-muted-foreground mb-3">
+                    <Calendar className="h-4 w-4" />
+                    <span>{project.publishedAt ? new Date(project.publishedAt).toLocaleDateString() : (project._createdAt ? new Date(project._createdAt).toLocaleDateString() : "")}</span>
+                  </div>
+
+                  <h3 className="text-xl font-bold mb-3 group-hover:text-primary transition-colors">{project.title}</h3>
+                  <p className="text-muted-foreground text-sm mb-4 line-clamp-3">{project.overview}</p>
+
+                  <div className="flex flex-wrap gap-2 mb-4">
+                    {(project.technologies || []).slice(0, 3).map((tag: string, i: number) => (
+                      <span key={i} className="px-2 py-1 bg-secondary text-secondary-foreground rounded text-xs">
+                        {tag}
+                      </span>
+                    ))}
+                    {(project.technologies?.length || 0) > 3 && (
+                      <span className="px-2 py-1 border border-border rounded text-xs">
+                        +{(project.technologies?.length || 0) - 3}
+                      </span>
+                    )}
+                  </div>
+
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center text-primary text-sm font-medium">
+                      View Project
+                      <svg className="ml-1 h-4 w-4 transition-transform group-hover:translate-x-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                      </svg>
+                    </div>
+                    <div className="flex gap-2">
+                      {project.githubLink && (
+                        <a
+                          href={project.githubLink}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          onClick={(e) => e.stopPropagation()}
+                          className="text-muted-foreground hover:text-foreground text-xs px-2 py-1 border border-border rounded hover:bg-muted transition-colors flex items-center gap-1"
+                        >
+                          <Github className="h-3 w-3" />
+                          GitHub
+                        </a>
+                      )}
+                      {project.liveLink && (
+                        <a
+                          href={project.liveLink}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          onClick={(e) => e.stopPropagation()}
+                          className="text-muted-foreground hover:text-foreground text-xs px-2 py-1 border border-border rounded hover:bg-muted transition-colors flex items-center gap-1"
+                        >
+                          <ExternalLink className="h-3 w-3" />
+                          Live Demo
+                        </a>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
 
         {filteredProjects.length === 0 && (
           <div className="text-center py-12">

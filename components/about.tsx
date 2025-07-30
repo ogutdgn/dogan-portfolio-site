@@ -15,22 +15,24 @@ export default function About() {
           <div>
             <h3 className="text-2xl font-bold mb-4">A Passionate Developer</h3>
             <p className="text-muted-foreground mb-6">
-              I'm a software developer with a passion for creating clean, efficient, and user-friendly applications.
-              With over 5 years of experience in the industry, I've worked on a variety of projects ranging from small
-              business websites to complex enterprise applications.
+              It's always been my dream to be useful to people and make their lives easier. 
+              I'm striving to achieve this goal. I'm currently studying Computer Science at 
+              a university in the United States, where I'm developing my skills in creating 
+              high-quality software.
             </p>
             <p className="text-muted-foreground mb-6">
-              My journey in software development began when I was in college, where I discovered my love for solving
-              complex problems through code. Since then, I've been continuously learning and improving my skills to stay
-              at the forefront of technology.
+              My interest in software began in high school at the age of 15. Since then, I've made it my goal 
+              to develop myself in various software areas. Currently, I'm developing my skills in building web 
+              applications and platforms using FullStack Development and AI.
             </p>
             <p className="text-muted-foreground">
-              When I'm not coding, you can find me exploring new technologies, contributing to open-source projects, or
-              sharing my knowledge through blog posts and community forums.
+              I'm a university student who shares my experiences and projects in software development, 
+              hoping they can be helpful to others who are on a similar path.
             </p>
+            
           </div>
 
-          <div className="grid grid-cols-1 gap-6">
+          <div className="grid grid-cols-1 gap-5">
             <div className="bg-card border border-border rounded-lg p-6">
               <div className="flex items-start gap-4">
                 <div className="bg-primary/10 p-3 rounded-full">

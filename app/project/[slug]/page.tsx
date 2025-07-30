@@ -1,200 +1,33 @@
 "use client"
 
-import { ArrowLeft, Calendar, Share2, ExternalLink, Github } from "lucide-react"
+import { ArrowLeft, Calendar, Clock, Share2, ExternalLink, Github } from "lucide-react"
+import { ClipLoader } from "react-spinners"
 import { useParams } from "next/navigation"
+import { useEffect, useState } from "react"
+import { getProject } from "@/lib/sanity.queries"
+import { urlForImage } from "@/lib/sanity.image"
+import { PortableText } from '@portabletext/react'
+import { portableTextComponents } from '@/components/portable-text-components'
 
-export default function ProjectDetail() {
+export default function ProjectDetailPage() {
   const params = useParams()
   const slug = params?.slug as string
+  const [project, setProject] = useState<any | null>(null)
+  const [loading, setLoading] = useState(true)
 
-  // Mock project data - in real app, this would come from a CMS or API
-  const projectData = {
-    "ecommerce-platform": {
-      title: "E-Commerce Platform",
-      date: "2024-01-20",
-      category: "Web Development",
-      image: "/placeholder.svg?height=400&width=800&text=E-Commerce+Platform",
-      tags: ["C++", "Qt", "SQLite", "CMake"],
-      demoLink: "#",
-      githubLink: "#",
-      description:
-        "A full-featured e-commerce platform with product management, cart functionality, and payment processing.",
-      features: [
-        "Inventory management system",
-        "Real-time stock tracking",
-        "Secure payment processing",
-        "Order management dashboard",
-        "Customer analytics",
-      ],
-      content: `
-# E-Commerce Platform
-
-This e-commerce platform provides businesses with a complete solution for selling products online. Built with C++ and Qt for high performance and cross-platform compatibility.
-
-## Key Features
-
-The platform includes a responsive design, product catalog with filtering and search capabilities, shopping cart functionality, secure checkout integration, user authentication, and an admin dashboard for managing products, orders, and customers.
-
-## Technical Implementation
-
-\`\`\`cpp
-#include <QtWidgets>
-#include <QApplication>
-#include <QMainWindow>
-
-class ECommerceApp : public QMainWindow {
-    Q_OBJECT
-
-public:
-    ECommerceApp(QWidget *parent = nullptr);
-    ~ECommerceApp();
-
-private slots:
-    void addToCart();
-    void processPayment();
-    void updateInventory();
-
-private:
-    void setupUI();
-    void connectDatabase();
-    
-    QWidget *centralWidget;
-    QVBoxLayout *mainLayout;
-    QPushButton *addToCartBtn;
-    QPushButton *checkoutBtn;
-};
-\`\`\`
-
-## Database Design
-
-The application uses SQLite for data persistence with optimized queries for product search and inventory management.
-
-## Performance Optimizations
-
-- Efficient memory management
-- Optimized database queries
-- Asynchronous payment processing
-- Caching for frequently accessed data
-
-## Deployment
-
-The application can be deployed on Windows, macOS, and Linux systems with minimal configuration changes.
-      `,
-    },
-    "task-management-system": {
-      title: "Task Management System",
-      date: "2024-01-15",
-      category: "Web Application",
-      image: "/placeholder.svg?height=400&width=800&text=Task+Management",
-      tags: ["Java", "Spring Boot", "React", "PostgreSQL"],
-      demoLink: "#",
-      githubLink: "#",
-      description: "A collaborative task management application with real-time updates and team workspaces.",
-      features: [
-        "Real-time collaboration",
-        "Task dependencies",
-        "Resource allocation",
-        "Progress tracking",
-        "Team management",
-      ],
-      content: `
-# Task Management System
-
-This task management system helps teams organize and track their work efficiently. Built with Java Spring Boot for the backend and React for the frontend.
-
-## Architecture Overview
-
-The system follows a microservices architecture with separate services for user management, task processing, and notifications.
-
-## Backend Implementation
-
-\`\`\`java
-@RestController
-@RequestMapping("/api/tasks")
-public class TaskController {
-    
-    @Autowired
-    private TaskService taskService;
-    
-    @PostMapping
-    public ResponseEntity<Task> createTask(@RequestBody TaskDto taskDto) {
-        Task task = taskService.createTask(taskDto);
-        return ResponseEntity.ok(task);
+  useEffect(() => {
+    async function fetchProject() {
+      try {
+        const data = await getProject(slug)
+        setProject(data)
+      } catch (err) {
+        setProject(null)
+      } finally {
+        setLoading(false)
+      }
     }
-    
-    @GetMapping("/{id}")
-    public ResponseEntity<Task> getTask(@PathVariable Long id) {
-        Task task = taskService.findById(id);
-        return ResponseEntity.ok(task);
-    }
-    
-    @PutMapping("/{id}")
-    public ResponseEntity<Task> updateTask(@PathVariable Long id, @RequestBody TaskDto taskDto) {
-        Task updatedTask = taskService.updateTask(id, taskDto);
-        return ResponseEntity.ok(updatedTask);
-    }
-}
-\`\`\`
-
-## Real-time Features
-
-WebSocket integration enables real-time updates across all connected clients when tasks are created, updated, or completed.
-
-## Database Schema
-
-PostgreSQL database with optimized indexes for fast task queries and user permissions.
-      `,
-    },
-    // Add more projects here...
-  }
-
-  const similarProjects = [
-    {
-      id: 3,
-      title: "System Resource Monitor",
-      date: "2024-01-10",
-      category: "Systems Programming",
-      image: "/placeholder.svg?height=300&width=500&text=System+Monitor",
-      slug: "system-resource-monitor",
-    },
-    {
-      id: 4,
-      title: "Compiler Design Project",
-      date: "2024-01-05",
-      category: "Systems Programming",
-      image: "/placeholder.svg?height=300&width=500&text=Compiler+Design",
-      slug: "compiler-design-project",
-    },
-    {
-      id: 5,
-      title: "Distributed Database System",
-      date: "2023-12-30",
-      category: "Database",
-      image: "/placeholder.svg?height=300&width=500&text=Distributed+DB",
-      slug: "distributed-database-system",
-    },
-  ]
-    .filter((project) => project.slug !== slug)
-    .slice(0, 3)
-
-  const handleProjectClick = (projectSlug: string) => {
-    if (typeof window !== "undefined") {
-      window.location.href = `/project/${projectSlug}`
-    }
-  }
-
-  const project = projectData[slug] || {
-    title: "Project Not Found",
-    date: "2024-01-01",
-    category: "General",
-    image: "/placeholder.svg?height=400&width=800&text=Not+Found",
-    tags: [],
-    demoLink: "#",
-    githubLink: "#",
-    description: "The requested project could not be found.",
-    features: [],
-    content: "# Project Not Found\n\nThe requested project could not be found.",
-  }
+    fetchProject()
+  }, [slug])
 
   const handleBackClick = () => {
     if (typeof window !== "undefined") {
@@ -203,6 +36,7 @@ PostgreSQL database with optimized indexes for fast task queries and user permis
   }
 
   const handleShareClick = () => {
+    if (!project) return
     if (navigator.share) {
       navigator.share({
         title: project.title,
@@ -216,36 +50,34 @@ PostgreSQL database with optimized indexes for fast task queries and user permis
 
   // Simple markdown-like rendering
   const renderContent = (content: string) => {
+    if (!content) return null
     return content
       .split("\n")
       .map((line, index) => {
-        // Headers
         if (line.startsWith("# ")) {
           return (
-            <h1 key={index} className="text-3xl font-bold mt-8 mb-4">
-              {line.substring(2)}
-            </h1>
+            <h1 key={index} className="text-3xl font-bold mt-8 mb-4">{line.substring(2)}</h1>
           )
         }
         if (line.startsWith("## ")) {
           return (
-            <h2 key={index} className="text-2xl font-bold mt-6 mb-3">
-              {line.substring(3)}
-            </h2>
+            <h2 key={index} className="text-2xl font-bold mt-6 mb-3">{line.substring(3)}</h2>
           )
         }
-
-        // Code blocks
-        if (line.startsWith("```")) {
+        if (line.startsWith("### ")) {
+          return (
+            <h3 key={index} className="text-xl font-bold mt-4 mb-2">{line.substring(4)}</h3>
+          )
+        }
+        if (line.startsWith("```") ) {
           const language = line.substring(3)
           const codeLines = []
           let i = index + 1
-
-          while (i < content.split("\n").length && !content.split("\n")[i].startsWith("```")) {
-            codeLines.push(content.split("\n")[i])
+          const linesArr = content.split("\n")
+          while (i < linesArr.length && !linesArr[i].startsWith("```") ) {
+            codeLines.push(linesArr[i])
             i++
           }
-
           return (
             <div key={index} className="my-6">
               <div className="bg-muted/50 border border-border rounded-lg overflow-hidden">
@@ -259,8 +91,6 @@ PostgreSQL database with optimized indexes for fast task queries and user permis
             </div>
           )
         }
-
-        // Skip lines that are part of code blocks
         if (
           line === "```" ||
           (index > 0 &&
@@ -278,19 +108,30 @@ PostgreSQL database with optimized indexes for fast task queries and user permis
         ) {
           return null
         }
-
-        // Regular paragraphs
         if (line.trim()) {
           return (
-            <p key={index} className="mb-4 leading-relaxed">
-              {line}
-            </p>
+            <p key={index} className="mb-4 leading-relaxed">{line}</p>
           )
         }
-
         return <br key={index} />
       })
       .filter(Boolean)
+  }
+
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-background">
+        <ClipLoader color="#6366f1" size={60} speedMultiplier={0.8} />
+      </div>
+    )
+  }
+
+  if (!project) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <p className="text-muted-foreground text-lg">Project not found.</p>
+      </div>
+    )
   }
 
   return (
@@ -322,9 +163,7 @@ PostgreSQL database with optimized indexes for fast task queries and user permis
         {/* Project Header */}
         <header className="mb-12">
           <div className="mb-6">
-            <span className="px-3 py-1 bg-primary text-primary-foreground text-sm rounded-full">
-              {project.category}
-            </span>
+            <span className="px-3 py-1 bg-primary text-primary-foreground text-sm rounded-full">{project.projectType || project.category || "Uncategorized"}</span>
           </div>
 
           <h1 className="text-4xl md:text-5xl font-bold mb-6 leading-tight">{project.title}</h1>
@@ -332,91 +171,69 @@ PostgreSQL database with optimized indexes for fast task queries and user permis
           <div className="flex items-center gap-6 text-muted-foreground mb-8">
             <div className="flex items-center gap-2">
               <Calendar className="h-5 w-5" />
-              <span>{new Date(project.date).toLocaleDateString()}</span>
-            </div>
-            <div className="flex flex-wrap gap-2">
-              {project.tags.map((tag, i) => (
-                <span key={i} className="px-2 py-1 bg-secondary text-secondary-foreground rounded text-sm">
-                  {tag}
-                </span>
-              ))}
+              <span>{project.publishedAt ? new Date(project.publishedAt).toLocaleDateString() : (project._createdAt ? new Date(project._createdAt).toLocaleDateString() : "")}</span>
             </div>
           </div>
+
+          <div className="flex flex-wrap gap-2 mb-8">
+            {(project.technologies || project.tags || []).map((tech: string, i: number) => (
+              <span key={i} className="px-2 py-1 bg-secondary text-secondary-foreground rounded text-sm">{tech}</span>
+            ))}
+          </div>
+
+          {(project.githubLink || project.liveLink) && (
+            <div className="flex gap-4 mb-8">
+              {project.githubLink && (
+                <a
+                  href={project.githubLink}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2 px-4 py-2 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors"
+                >
+                  <Github className="h-4 w-4" />
+                  View on GitHub
+                </a>
+              )}
+              {project.liveLink && (
+                <a
+                  href={project.liveLink}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2 px-4 py-2 border border-border rounded-lg hover:bg-muted transition-colors"
+                >
+                  <ExternalLink className="h-4 w-4" />
+                  Live Demo
+                </a>
+              )}
+            </div>
+          )}
 
           <img
-            src={project.image || "/placeholder.svg"}
+            src={project.image ? urlForImage(project.image).url() : "/placeholder.jpg"}
             alt={project.title}
-            className="w-full aspect-video object-cover rounded-lg mb-8"
+            className="w-full h-64 md:h-80 object-cover rounded-lg mb-8"
           />
-
-          <p className="text-lg text-muted-foreground mb-8">{project.description}</p>
-
-          <div className="flex flex-col sm:flex-row gap-4 mb-8">
-            <a
-              href={project.githubLink}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex-1 border border-border px-4 py-3 rounded-lg hover:bg-muted transition-colors flex items-center justify-center"
-            >
-              <Github className="h-4 w-4 mr-2" />
-              View Source Code
-            </a>
-            <a
-              href={project.demoLink}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex-1 bg-primary text-primary-foreground px-4 py-3 rounded-lg hover:bg-primary/90 transition-colors flex items-center justify-center"
-            >
-              <ExternalLink className="h-4 w-4 mr-2" />
-              Live Demo
-            </a>
-          </div>
-
-          <div>
-            <h3 className="text-xl font-semibold mb-3">Key Features</h3>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
-              {project.features.map((feature, i) => (
-                <div key={i} className="flex items-center gap-2">
-                  <div className="w-2 h-2 bg-primary rounded-full flex-shrink-0" />
-                  <span className="text-muted-foreground">{feature}</span>
-                </div>
-              ))}
-            </div>
-          </div>
         </header>
 
         {/* Project Content */}
-        <div className="prose prose-lg max-w-none">{renderContent(project.content)}</div>
-
-        {/* Similar Projects Section */}
-        <div className="mt-16 pt-8 border-t">
-          <h3 className="text-2xl font-bold mb-6">Similar Projects</h3>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {similarProjects.map((similarProject) => (
-              <div
-                key={similarProject.id}
-                className="group bg-card border border-border rounded-lg overflow-hidden cursor-pointer transition-all duration-300 hover:shadow-lg"
-                onClick={() => handleProjectClick(similarProject.slug)}
-              >
-                <img
-                  src={similarProject.image || "/placeholder.svg"}
-                  alt={similarProject.title}
-                  className="w-full aspect-video object-cover transition-transform duration-300 group-hover:scale-105"
-                />
-                <div className="p-4">
-                  <span className="px-2 py-1 bg-primary text-primary-foreground text-xs rounded-full">
-                    {similarProject.category}
-                  </span>
-                  <h4 className="text-lg font-semibold mt-2 mb-2 group-hover:text-primary transition-colors">
-                    {similarProject.title}
-                  </h4>
-                  <div className="text-sm text-muted-foreground">
-                    {new Date(similarProject.date).toLocaleDateString()}
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
+        <div className="prose prose-lg max-w-none mb-8">
+          {project.overview && (
+            <>
+              <h2 className="text-2xl font-bold mb-4">Project Overview</h2>
+              <p className="text-muted-foreground leading-relaxed mb-8">{project.overview}</p>
+            </>
+          )}
+          
+          {Array.isArray(project.content) && project.content.length > 0 ? (
+            <PortableText value={project.content} components={portableTextComponents} />
+          ) : project.description ? (
+            <>
+              <h2 className="text-2xl font-bold mb-4">Project Details</h2>
+              {renderContent(project.description)}
+            </>
+          ) : !project.overview ? (
+            <p className="text-muted-foreground">No detailed content available for this project.</p>
+          ) : null}
         </div>
       </article>
     </div>

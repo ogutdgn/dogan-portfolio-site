@@ -30,9 +30,9 @@ export default function Hero() {
       const startPosition = window.pageYOffset
       const distance = offsetTop - startPosition
       const duration = 1200 // Increased duration for slower animation
-      let start = null
+      let start: number | null = null
 
-      function animation(currentTime) {
+      const animation = (currentTime: number) => {
         if (start === null) start = currentTime
         const timeElapsed = currentTime - start
         const run = ease(timeElapsed, startPosition, distance, duration)
@@ -41,7 +41,7 @@ export default function Hero() {
       }
 
       // Easing function for smooth animation
-      function ease(t, b, c, d) {
+      const ease = (t: number, b: number, c: number, d: number): number => {
         t /= d / 2
         if (t < 1) return (c / 2) * t * t + b
         t--
@@ -136,10 +136,10 @@ export default function Hero() {
                 <div className="absolute top-1/4 -left-8 w-6 h-6 bg-primary/25 rounded-full animate-pulse delay-500"></div>
 
                 {/* Status indicator */}
-                <div className="absolute bottom-8 right-8 flex items-center gap-2 bg-background/90 backdrop-blur-sm px-3 py-2 rounded-full border border-border">
+                {/* <div className="absolute bottom-8 right-8 flex items-center gap-2 bg-background/90 backdrop-blur-sm px-3 py-2 rounded-full border border-border">
                   <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
                   <span className="text-xs font-medium">Available for work</span>
-                </div>
+                </div> */}
               </div>
             </div>
           </div>

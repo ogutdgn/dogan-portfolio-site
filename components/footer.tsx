@@ -7,7 +7,6 @@ export default function Footer() {
     { name: "GitHub", href: "https://github.com/ogutdgn", icon: Github },
     { name: "LinkedIn", href: "https://www.linkedin.com/in/doganogut/", icon: Linkedin },
     { name: "Email", href: "mailto:ogutdgn@gmail.com", icon: Mail },
-    { name: "Email", href: "mailto:ogutdgn@gmail.com", icon: Mail },
   ]
 
   return (

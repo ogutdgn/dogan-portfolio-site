@@ -1,6 +1,7 @@
+
 import { ClipLoader } from "react-spinners"
 
-export default function BlogsLoading() {
+export default function ProjectLoading() {
   return (
     <div className="min-h-screen flex items-center justify-center">
       <div className="flex flex-col items-center gap-4">

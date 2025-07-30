@@ -1,10 +1,9 @@
-export default function Loading() {
+import { ClipLoader } from "react-spinners"
+export default function BlogLoading() {
   return (
-    <div className="min-h-screen bg-background flex items-center justify-center">
-      <div className="text-center">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4"></div>
-        <p className="text-muted-foreground">Loading blog post...</p>
-      </div>
+    <div className="min-h-screen flex items-center justify-center">
+      <ClipLoader color="#6366f1" size={60} speedMultiplier={0.8} />
     </div>
   )
 }
+

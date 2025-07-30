@@ -1,10 +1,19 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect, useMemo } from "react"
+import { getBlogs } from "@/lib/sanity.queries"
+import { urlForImage } from "@/lib/sanity.image"
 import { ArrowLeft, Search, Calendar, Clock, Filter } from "lucide-react"
+import FilterDropdown from "@/components/ui/filter-dropdown"
+import { ClipLoader } from "react-spinners"
 
-// Navigation Toggle Component
-function NavigationToggle({ activeTab, onTabChange }) {
+
+interface NavigationToggleProps {
+  activeTab: string
+  onTabChange: (tab: string) => void
+}
+
+function NavigationToggle({ activeTab, onTabChange }: NavigationToggleProps) {
   return (
     <div className="flex items-center bg-muted rounded-lg p-1">
       <button
@@ -31,82 +40,58 @@ function NavigationToggle({ activeTab, onTabChange }) {
   )
 }
 
+
+
+interface Blog {
+  _id: string
+  title: string
+  description: string
+  slug: string
+  publishedAt: string
+  readingTime: number
+  mainImage: any
+  mainCategory: string
+  tags: string[]
+}
+
 export default function BlogsPage() {
   const [searchTerm, setSearchTerm] = useState("")
   const [selectedCategory, setSelectedCategory] = useState("All")
   const [activeTab, setActiveTab] = useState("blogs")
+  const [blogs, setBlogs] = useState<Blog[]>([])
+  const [loading, setLoading] = useState(true)
 
-  const blogs = [
-    {
-      id: 1,
-      title: "Building a Real-time Chat Application with WebSockets",
-      excerpt:
-        "Learn how I built a scalable real-time chat application using Node.js, Socket.io, and React. This comprehensive guide covers everything from setup to deployment.",
-      date: "2024-01-15",
-      readTime: "8 min read",
-      category: "Web Development",
-      image: "/placeholder.svg?height=300&width=500&text=Chat+App",
-      slug: "building-realtime-chat-websockets",
-    },
-    {
-      id: 2,
-      title: "Optimizing C++ Performance: Memory Management Techniques",
-      excerpt:
-        "Deep dive into advanced C++ memory management techniques that can significantly improve your application's performance. Includes practical examples and benchmarks.",
-      date: "2024-01-08",
-      readTime: "12 min read",
-      category: "Systems Programming",
-      image: "/placeholder.svg?height=300&width=500&text=C%2B%2B+Performance",
-      slug: "cpp-memory-management-optimization",
-    },
-    {
-      id: 3,
-      title: "Creating a Custom Neural Network Framework from Scratch",
-      excerpt:
-        "Step-by-step guide to building your own neural network framework using C++ and CUDA. Learn the fundamentals of deep learning implementation.",
-      date: "2024-01-01",
-      readTime: "15 min read",
-      category: "Machine Learning",
-      image: "/placeholder.svg?height=300&width=500&text=Neural+Network",
-      slug: "custom-neural-network-framework",
-    },
-    {
-      id: 4,
-      title: "Database Sharding Strategies for High-Traffic Applications",
-      excerpt:
-        "Explore different database sharding techniques and learn how to implement them effectively for applications that need to handle millions of requests.",
-      date: "2023-12-25",
-      readTime: "10 min read",
-      category: "Database",
-      image: "/placeholder.svg?height=300&width=500&text=Database+Sharding",
-      slug: "database-sharding-strategies",
-    },
-    {
-      id: 5,
-      title: "Implementing OAuth 2.0 Authentication in Next.js",
-      excerpt:
-        "Complete guide to implementing secure OAuth 2.0 authentication in your Next.js applications with multiple providers and best security practices.",
-      date: "2023-12-18",
-      readTime: "7 min read",
-      category: "Security",
-      image: "/placeholder.svg?height=300&width=500&text=OAuth+2.0",
-      slug: "oauth2-authentication-nextjs",
-    },
-  ]
+  useEffect(() => {
+    async function fetchBlogs() {
+      try {
+        const data = await getBlogs()
+        setBlogs(data)
+      } catch (err) {
+        // Error handling
+      } finally {
+        setLoading(false)
+      }
+    }
+    fetchBlogs()
+  }, [])
 
-  const categories = ["All", "Web Development", "Systems Programming", "Machine Learning", "Database", "Security"]
+  const categories = useMemo(() => {
+    const mainCategories = blogs.map(blog => blog.mainCategory).filter(Boolean)
+    const uniqueCategories = Array.from(new Set(mainCategories))
+    return ["All", ...uniqueCategories]
+  }, [blogs])
 
   const filteredBlogs = blogs.filter((blog) => {
     const matchesSearch =
-      blog.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      blog.excerpt.toLowerCase().includes(searchTerm.toLowerCase())
-    const matchesCategory = selectedCategory === "All" || blog.category === selectedCategory
+      blog.title.toLowerCase().includes(searchTerm.toLowerCase())
+    const matchesCategory = selectedCategory === "All" || blog.mainCategory === selectedCategory
     return matchesSearch && matchesCategory
   })
 
-  const handleBlogClick = (slug: string) => {
+  const handleBlogClick = (slug: string | { current: string }) => {
+    const blogSlug = typeof slug === "string" ? slug : slug.current
     if (typeof window !== "undefined") {
-      window.location.href = `/blog/${slug}`
+      window.location.href = `/blog/${blogSlug}`
     }
   }
 
@@ -118,7 +103,6 @@ export default function BlogsPage() {
 
   const handleTabChange = (tab: string) => {
     if (tab === "projects") {
-      // Add loading state before navigation
       document.body.style.opacity = "0.8"
       if (typeof window !== "undefined") {
         setTimeout(() => {
@@ -145,7 +129,7 @@ export default function BlogsPage() {
             <div className="flex-1 flex justify-end md:justify-center">
               <NavigationToggle activeTab={activeTab} onTabChange={handleTabChange} />
             </div>
-            <div className="hidden md:block w-32"></div> {/* Spacer for centering on desktop */}
+            <div className="hidden md:block w-32"></div>
           </div>
         </div>
       </header>
@@ -165,20 +149,13 @@ export default function BlogsPage() {
                 className="w-full pl-10 pr-4 py-3 border border-border rounded-lg bg-background focus:outline-none focus:ring-2 focus:ring-primary"
               />
             </div>
-            <div className="relative">
-              <Filter className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-muted-foreground" />
-              <select
-                value={selectedCategory}
-                onChange={(e) => setSelectedCategory(e.target.value)}
-                className="pl-10 pr-8 py-3 border border-border rounded-lg bg-background focus:outline-none focus:ring-2 focus:ring-primary appearance-none cursor-pointer"
-              >
-                {categories.map((category) => (
-                  <option key={category} value={category}>
-                    {category}
-                  </option>
-                ))}
-              </select>
-            </div>
+            <FilterDropdown
+              options={categories}
+              value={selectedCategory}
+              onChange={setSelectedCategory}
+              placeholder="Filter by category"
+              icon={<Filter className="h-5 w-5" />}
+            />
           </div>
 
           <p className="text-muted-foreground">
@@ -186,45 +163,78 @@ export default function BlogsPage() {
           </p>
         </div>
 
-        {/* Blog Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {filteredBlogs.map((blog) => (
-            <div
-              key={blog.id}
-              className="group bg-card border border-border rounded-lg overflow-hidden cursor-pointer transition-all duration-300 hover:shadow-xl hover:scale-[1.02]"
-              onClick={() => handleBlogClick(blog.slug)}
-            >
-              <div className="relative overflow-hidden">
-                <img
-                  src={blog.image || "/placeholder.svg"}
-                  alt={blog.title}
-                  className="w-full aspect-video object-cover transition-transform duration-300 group-hover:scale-105"
-                />
-                <div className="absolute top-4 left-4">
-                  <span className="px-3 py-1 bg-primary text-primary-foreground text-xs rounded-full">
-                    {blog.category}
-                  </span>
-                </div>
-              </div>
-
-              <div className="p-6">
-                <div className="flex items-center gap-4 text-sm text-muted-foreground mb-3">
-                  <div className="flex items-center gap-1">
-                    <Calendar className="h-4 w-4" />
-                    <span>{new Date(blog.date).toLocaleDateString()}</span>
-                  </div>
-                  <div className="flex items-center gap-1">
-                    <Clock className="h-4 w-4" />
-                    <span>{blog.readTime}</span>
-                  </div>
-                </div>
-
-                <h3 className="text-xl font-bold mb-3 group-hover:text-primary transition-colors">{blog.title}</h3>
-                <p className="text-muted-foreground text-sm">{blog.excerpt}</p>
-              </div>
+        {loading ? (
+          <div className="text-center py-12">
+            <div className="flex justify-center">
+              <ClipLoader color="#6366f1" size={60} speedMultiplier={0.8} />
             </div>
-          ))}
-        </div>
+          </div>
+        ) : blogs.length === 0 ? (
+          <div className="text-center py-12">
+            <p className="text-muted-foreground text-lg">There are no blogs available at the moment.</p>
+          </div>
+        ) : filteredBlogs.length === 0 ? (
+          <div className="text-center py-12">
+            <p className="text-muted-foreground text-lg">No blogs found matching your search criteria.</p>
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {filteredBlogs.map((blog) => (
+              <div
+                key={blog._id}
+                className="group bg-card border border-border rounded-lg overflow-hidden cursor-pointer transition-all duration-500 hover:shadow-xl hover:scale-[1.02]"
+                onClick={() => handleBlogClick(blog.slug)}
+              >
+                <div className="relative overflow-hidden">
+                  <img
+                    src={blog.mainImage ? urlForImage(blog.mainImage).url() : "/placeholder.jpg"}
+                    alt={blog.title}
+                    className="w-full h-48 object-cover transition-transform duration-300 group-hover:scale-105"
+                  />
+                  <div className="absolute top-4 left-4">
+                    <span className="px-3 py-1 bg-primary text-primary-foreground text-xs rounded-full">
+                      {blog.mainCategory || "Uncategorized"}
+                    </span>
+                  </div>
+                </div>
+
+                <div className="p-6">
+                  <div className="flex items-center gap-4 text-sm text-muted-foreground mb-3">
+                    <div className="flex items-center gap-1">
+                      <Calendar className="h-4 w-4" />
+                      <span>{blog.publishedAt ? new Date(blog.publishedAt).toLocaleDateString() : ""}</span>
+                    </div>
+                    <div className="flex items-center gap-1">
+                      <Clock className="h-4 w-4" />
+                      <span>{blog.readingTime || 5} min read</span>
+                    </div>
+                  </div>
+
+                  <h3 className="text-xl font-bold mb-3 group-hover:text-primary transition-colors">{blog.title}</h3>
+                  {blog.description && (
+                    <p className="text-muted-foreground text-sm mb-4 line-clamp-3">{blog.description}</p>
+                  )}
+                  {blog.tags && blog.tags.length > 0 && (
+                    <div className="flex flex-wrap gap-2 mb-4">
+                      {blog.tags.slice(0, 3).map((tag, index) => (
+                        <span key={index} className="px-2 py-1 bg-muted text-muted-foreground text-xs rounded">
+                          {tag}
+                        </span>
+                      ))}
+                    </div>
+                  )}
+
+                  <div className="flex items-center text-primary text-sm font-medium">
+                    Read More
+                    <svg className="ml-1 h-4 w-4 transition-transform group-hover:translate-x-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                    </svg>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
 
         {filteredBlogs.length === 0 && (
           <div className="text-center py-12">

@@ -8,7 +8,7 @@ export default function TechStack() {
       icon: <Code2 className="h-6 w-6" />,
       title: "Programming Languages",
       description: "Core languages for systems and application development",
-      skills: ["C++", "C", "Java", "Ruby", "Python", "TypeScript", "JavaScript"],
+      skills: ["Python", "TypeScript", "JavaScript", "Assembly", "C", "C++"],
     },
     concepts: {
       icon: <Binary className="h-6 w-6" />,
@@ -20,25 +20,25 @@ export default function TechStack() {
       icon: <Layout className="h-6 w-6" />,
       title: "Frontend Development",
       description: "Modern web development technologies",
-      skills: ["React", "Next.js", "HTML/CSS", "Tailwind CSS", "Redux", "WebGL"],
+      skills: ["React.js", "Next.js", "HTML/CSS", "Tailwind CSS", "Bootstrap", "Redux", "Zustand"],
     },
     backend: {
       icon: <Server className="h-6 w-6" />,
       title: "Backend Development",
       description: "Server-side frameworks and technologies",
-      skills: ["Node.js", "Express", "Spring Boot", "Ruby on Rails"],
+      skills: ["Node.js", "Express", "Django", "Sanity"],
     },
     database: {
       icon: <Database className="h-6 w-6" />,
       title: "Database Systems",
       description: "Database management and optimization",
-      skills: ["MongoDB", "PostgreSQL", "MySQL", "Redis"],
+      skills: ["MongoDB", "PostgreSQL", "MySQL"],
     },
     tools: {
       icon: <Wrench className="h-6 w-6" />,
       title: "Development Tools",
       description: "Tools and environments for development",
-      skills: ["Git", "Docker", "AWS", "Linux/Unix", "CMake", "Visual Studio"],
+      skills: ["Git", "Docker", "Linux/Unix", "Visual Studio"],
     },
   }
 

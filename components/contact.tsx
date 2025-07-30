@@ -1,49 +1,26 @@
 "use client"
 
-import { useState } from "react"
-import { Mail, MapPin, Phone, Github, Linkedin } from "lucide-react"
+import { Mail, MapPin, Phone, Github, Linkedin, CheckCircle, AlertCircle } from "lucide-react"
+import { useContactForm } from "@/hooks/use-contact-form"
 
 export default function Contact() {
-  const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-    subject: "",
-    message: "",
-  })
-  const [isSubmitting, setIsSubmitting] = useState(false)
+  const {
+    formData,
+    isLoading,
+    isSuccess,
+    error,
+    updateField,
+    submitForm,
+  } = useContactForm()
 
-  const handleChange = (e) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target
-    setFormData((prev) => ({ ...prev, [name]: value }))
+    updateField(name as keyof typeof formData, value)
   }
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    setIsSubmitting(true)
-
-    // Simulate form submission
-    await new Promise((resolve) => setTimeout(resolve, 1500))
-
-    // Simple toast notification
-    const toastElement = document.createElement("div")
-    toastElement.className = "fixed top-4 right-4 bg-primary text-primary-foreground p-4 rounded-lg shadow-lg z-50"
-    toastElement.innerHTML = "Message sent! Thank you for your message. I'll get back to you soon."
-    document.body.appendChild(toastElement)
-
-    setTimeout(() => {
-      toastElement.classList.add("opacity-0", "transition-opacity", "duration-300")
-      setTimeout(() => {
-        document.body.removeChild(toastElement)
-      }, 300)
-    }, 3000)
-
-    setFormData({
-      name: "",
-      email: "",
-      subject: "",
-      message: "",
-    })
-    setIsSubmitting(false)
+    await submitForm()
   }
 
   const contactInfo = [
@@ -101,6 +78,14 @@ export default function Contact() {
                 <h4 className="text-lg font-semibold mb-4">Follow Me</h4>
                 <div className="flex gap-4">
                   <a
+                    href="https://github.com/ogutdgn"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="p-3 border border-border rounded-full hover:bg-muted transition-colors"
+                  >
+                    <Github className="h-5 w-5" />
+                  </a>
+                  <a
                     href="https://www.linkedin.com/in/doganogut/"
                     target="_blank"
                     rel="noopener noreferrer"
@@ -115,14 +100,6 @@ export default function Contact() {
                     className="p-3 border border-border rounded-full hover:bg-muted transition-colors"
                   >
                     <Mail className="h-5 w-5" />
-                  </a>
-                  <a
-                    href="https://github.com/ogutdgn"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="p-3 border border-border rounded-full hover:bg-muted transition-colors"
-                  >
-                    <Github className="h-5 w-5" />
                   </a>
                 </div>
               </div>
@@ -193,12 +170,36 @@ export default function Contact() {
                     className="w-full px-3 py-2 border border-border rounded-md bg-background focus:outline-none focus:ring-2 focus:ring-primary resize-none"
                   />
                 </div>
+
+                {/* Success Message */}
+                {isSuccess && (
+                  <div className="flex items-center gap-2 p-4 bg-green-50 border border-green-200 rounded-md text-green-800">
+                    <CheckCircle className="h-5 w-5" />
+                    <span>Message sent successfully! I'll get back to you soon.</span>
+                  </div>
+                )}
+
+                {/* Error Message */}
+                {error && (
+                  <div className="flex items-center gap-2 p-4 bg-red-50 border border-red-200 rounded-md text-red-800">
+                    <AlertCircle className="h-5 w-5" />
+                    <span>{error}</span>
+                  </div>
+                )}
+
                 <button
                   type="submit"
-                  className="w-full bg-primary text-primary-foreground py-3 rounded-md hover:bg-primary/90 transition-colors disabled:opacity-50"
-                  disabled={isSubmitting}
+                  className="w-full bg-primary text-primary-foreground py-3 rounded-md hover:bg-primary/90 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                  disabled={isLoading}
                 >
-                  {isSubmitting ? "Sending..." : "Send Message"}
+                  {isLoading ? (
+                    <div className="flex items-center justify-center gap-2">
+                      <div className="w-4 h-4 border-2 border-primary-foreground border-t-transparent rounded-full animate-spin"></div>
+                      Sending...
+                    </div>
+                  ) : (
+                    "Send Message"
+                  )}
                 </button>
               </form>
             </div>

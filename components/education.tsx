@@ -7,15 +7,14 @@ export default function Education() {
     {
       id: 1,
       degree: "Bachelor of Science in Computer Engineering",
-      university: "Istanbul Technical University",
-      location: "Istanbul, Turkey",
-      period: "2020 - 2024",
+      university: "University of Texas at Arlington",
+      location: "Arlington, Texas",
+      period: "2024 - 2028",
       status: "Current",
       description:
         "Focusing on software engineering, algorithms, and system design. Relevant coursework includes Data Structures, Object-Oriented Programming, Database Systems, and Software Engineering.",
       gpa: "3.7/4.0",
       achievements: [
-        "Dean's List for 3 consecutive semesters",
         "Member of Computer Engineering Student Society",
         "Participated in ACM Programming Contest",
       ],
