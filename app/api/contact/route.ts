@@ -29,7 +29,7 @@ export async function POST(request: NextRequest) {
     // Send email
     const { data, error } = await resend.emails.send({
       from: 'Portfolio Contact <noreply@ogutdgn.com>', // email sender
-      to: [process.env.CONTACT_EMAIL || 'contactdgn@ogutdgn.com'],
+      to: [process.env.CONTACT_EMAIL || 'doganogut0@gmail.com'],
       subject: `Portfolio Contact: ${subject}`,
       react: ContactFormEmail({ name, email, subject, message }),
       replyTo: email, // Reply to the user's email
