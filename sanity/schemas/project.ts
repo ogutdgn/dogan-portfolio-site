@@ -47,6 +47,7 @@ export const project = defineType({
       options: {
         list: [
           { title: 'Web Application', value: 'web-application' },
+          { title: 'Chrome Extension', value: 'chrome-extension' },
           { title: 'Mobile Application', value: 'mobile-application' },
           { title: 'Desktop Application', value: 'desktop-application' },
           { title: 'AI/ML Project', value: 'ai-ml-project' },
