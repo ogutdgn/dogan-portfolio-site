@@ -6,7 +6,7 @@ export default function Education() {
   const education = [
     {
       id: 1,
-      degree: "Bachelor of Science in Computer Engineering",
+      degree: "Bachelor of Science in Computer Science",
       university: "University of Texas at Arlington",
       location: "Arlington, Texas",
       period: "2024 - 2028",
