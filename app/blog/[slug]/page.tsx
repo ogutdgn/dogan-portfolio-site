@@ -9,7 +9,7 @@ import { PortableText } from '@portabletext/react'
 import { portableTextComponents } from '@/components/portable-text-components'
 import { useEffect, useState } from "react"
 import { urlForImage } from "@/lib/sanity.image"
-import Footer from "../components/footer"
+import Footer from "../../../components/footer"
 
 
 

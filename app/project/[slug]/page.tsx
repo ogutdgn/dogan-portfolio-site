@@ -8,7 +8,7 @@ import { getProject } from "@/lib/sanity.queries"
 import { urlForImage } from "@/lib/sanity.image"
 import { PortableText } from '@portabletext/react'
 import { portableTextComponents } from '@/components/portable-text-components'
-import Footer from "../components/footer"
+import Footer from "../../../components/footer"
 
 export default function ProjectDetailPage() {
   const params = useParams()
