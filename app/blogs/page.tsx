@@ -6,6 +6,7 @@ import { urlForImage } from "@/lib/sanity.image"
 import { ArrowLeft, Search, Calendar, Clock, Filter } from "lucide-react"
 import FilterDropdown from "@/components/ui/filter-dropdown"
 import { ClipLoader } from "react-spinners"
+import Footer from "../components/footer"
 
 
 interface NavigationToggleProps {
@@ -242,6 +243,7 @@ export default function BlogsPage() {
           </div>
         )}
       </main>
+      <Footer />
     </div>
   )
 }

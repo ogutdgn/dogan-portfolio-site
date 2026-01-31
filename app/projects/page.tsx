@@ -6,6 +6,7 @@ import { urlForImage } from "@/lib/sanity.image"
 import { getProjects } from "@/lib/sanity.queries"
 import { ArrowLeft, Search, Calendar, Filter, Github, ExternalLink } from "lucide-react"
 import FilterDropdown from "@/components/ui/filter-dropdown"
+import Footer from "../components/footer"
 
 interface NavigationToggleProps {
   activeTab: string
@@ -270,6 +271,7 @@ export default function ProjectsPage() {
           </div>
         )}
       </main>
+      <Footer />
     </div>
   )
 }
