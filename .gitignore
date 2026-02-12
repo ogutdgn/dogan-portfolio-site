@@ -9,6 +9,10 @@
 
 # production
 /build
+/dist
+
+# sanity build
+/.sanity
 
 # debug
 npm-debug.log*
