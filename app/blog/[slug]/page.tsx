@@ -4,7 +4,6 @@
 import { ArrowLeft, Calendar, Clock, Share2 } from "lucide-react"
 import { ClipLoader } from "react-spinners"
 import { useParams } from "next/navigation"
-import { getBlogBySlug } from "@/lib/sanity.queries"
 import { PortableText } from '@portabletext/react'
 import { portableTextComponents } from '@/components/portable-text-components'
 import { useEffect, useState } from "react"
@@ -22,7 +21,8 @@ export default function BlogDetailPage() {
   useEffect(() => {
     async function fetchBlog() {
       try {
-        const data = await getBlogBySlug(slug)
+        const res = await fetch(`/api/blogs/${slug}`)
+        const data = res.ok ? await res.json() : null
         setBlog(data)
       } catch (err) {
         setBlog(null)

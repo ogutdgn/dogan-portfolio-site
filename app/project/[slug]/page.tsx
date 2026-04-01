@@ -4,7 +4,6 @@ import { ArrowLeft, Calendar, Clock, Share2, ExternalLink, Github } from "lucide
 import { ClipLoader } from "react-spinners"
 import { useParams } from "next/navigation"
 import { useEffect, useState } from "react"
-import { getProject } from "@/lib/sanity.queries"
 import { urlForImage } from "@/lib/sanity.image"
 import { PortableText } from '@portabletext/react'
 import { portableTextComponents } from '@/components/portable-text-components'
@@ -19,7 +18,8 @@ export default function ProjectDetailPage() {
   useEffect(() => {
     async function fetchProject() {
       try {
-        const data = await getProject(slug)
+        const res = await fetch(`/api/projects/${slug}`)
+        const data = res.ok ? await res.json() : null
         setProject(data)
       } catch (err) {
         setProject(null)
