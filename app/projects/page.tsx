@@ -3,7 +3,6 @@
 import { useState, useEffect, useMemo } from "react"
 import { ClipLoader } from "react-spinners"
 import { urlForImage } from "@/lib/sanity.image"
-import { getProjects } from "@/lib/sanity.queries"
 import { ArrowLeft, Search, Calendar, Filter, Github, ExternalLink } from "lucide-react"
 import FilterDropdown from "@/components/ui/filter-dropdown"
 import Footer from "../../components/footer"
@@ -67,7 +66,8 @@ export default function ProjectsPage() {
   useEffect(() => {
     async function fetchProjects() {
       try {
-        const fetchedProjects = await getProjects()
+        const res = await fetch('/api/projects')
+        const fetchedProjects = await res.json()
         console.log("Fetched projects:", fetchedProjects)
         setProjects(fetchedProjects)
         setLoading(false)

@@ -1,7 +1,6 @@
 "use client"
 
 import { useState, useEffect, useMemo } from "react"
-import { getBlogs } from "@/lib/sanity.queries"
 import { urlForImage } from "@/lib/sanity.image"
 import { ArrowLeft, Search, Calendar, Clock, Filter } from "lucide-react"
 import FilterDropdown from "@/components/ui/filter-dropdown"
@@ -65,7 +64,8 @@ export default function BlogsPage() {
   useEffect(() => {
     async function fetchBlogs() {
       try {
-        const data = await getBlogs()
+        const res = await fetch('/api/blogs')
+        const data = await res.json()
         setBlogs(data)
       } catch (err) {
         // Error handling
