@@ -2,7 +2,6 @@
 
 import { useState, useEffect } from "react"
 import { ChevronLeft, ChevronRight, Calendar, Clock, ArrowRight } from "lucide-react"
-import { getBlogs } from "@/lib/sanity.queries"
 import { urlForImage } from "@/lib/sanity.image"
 import { ClipLoader } from "react-spinners"
 
@@ -32,7 +31,8 @@ export default function Blogs() {
     setIsMounted(true)
     async function fetchBlogs() {
       try {
-        const data = await getBlogs()
+        const res = await fetch('/api/blogs')
+        const data = await res.json()
         setBlogs(data)
       } catch (err) {
         // Error handling

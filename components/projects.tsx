@@ -3,7 +3,6 @@
 
 import { useState, useEffect } from "react"
 import { ChevronLeft, ChevronRight, Calendar, ArrowRight, Filter, Github, ExternalLink } from "lucide-react"
-import { getProjects } from "@/lib/sanity.queries"
 import { urlForImage } from "@/lib/sanity.image"
 import { ClipLoader } from "react-spinners"
 import FilterDropdown from "@/components/ui/filter-dropdown"
@@ -37,7 +36,8 @@ export default function Projects() {
     setIsMounted(true)
     async function fetchProjects() {
       try {
-        const data = await getProjects()
+        const res = await fetch('/api/projects')
+        const data = await res.json()
         setProjects(data)
       } catch (err) {
         // Error handling
