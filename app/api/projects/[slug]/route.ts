@@ -1,6 +1,8 @@
 import { NextResponse } from 'next/server';
 import { getProject } from '@/lib/sanity.queries';
 
+export const dynamic = 'force-dynamic';
+
 export async function GET(request: Request, { params }: { params: { slug: string } }) {
   try {
     const project = await getProject(params.slug);

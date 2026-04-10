@@ -1,6 +1,8 @@
 import { NextResponse } from 'next/server';
 import { getBlogBySlug } from '@/lib/sanity.queries';
 
+export const dynamic = 'force-dynamic';
+
 export async function GET(request: Request, { params }: { params: { slug: string } }) {
   try {
     const blog = await getBlogBySlug(params.slug);
