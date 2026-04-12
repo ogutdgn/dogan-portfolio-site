@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { getToolBySlug } from "@/lib/queries";
+import { getToolBySlug } from "@ogutdgn/sanity-shared";
 
 export async function GET(request: Request, { params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;

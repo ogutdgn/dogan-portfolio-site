@@ -2,19 +2,19 @@
 
 import { useState, useEffect } from "react"
 import { ChevronLeft, ChevronRight, Calendar, Clock, ArrowRight } from "lucide-react"
-import { urlForImage } from "@/lib/sanity.image"
+import { urlFor as urlForImage } from "@ogutdgn/sanity-shared"
 import { ClipLoader } from "react-spinners"
 
 interface Blog {
   _id: string
   title: string
-  description: string
-  publishedAt: string
-  readingTime: number
-  mainImage: any
-  categories: string[]
-  mainCategory: string
-  tags: string[]
+  description?: string
+  publishedAt?: string
+  readingTime?: number
+  mainImage?: any
+  categories?: string[]
+  mainCategory?: string
+  tags?: string[]
   slug: string
 }
 

@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { getBlogBySlug } from '@/lib/sanity.queries';
+import { getBlogBySlug } from '@ogutdgn/sanity-shared';
 
 export const dynamic = 'force-dynamic';
 

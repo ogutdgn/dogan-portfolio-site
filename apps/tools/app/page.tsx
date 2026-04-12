@@ -2,7 +2,7 @@ export const revalidate = 30;
 
 import Image from "next/image";
 import { FilterBar } from "@/components/filter-bar";
-import { getAllTools, getAllCategories } from "@/lib/queries";
+import { getAllTools, getAllCategories } from "@ogutdgn/sanity-shared";
 
 export default async function HomePage() {
   const [tools, categories] = await Promise.all([getAllTools(), getAllCategories()]);

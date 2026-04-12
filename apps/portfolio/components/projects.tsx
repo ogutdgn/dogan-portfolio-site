@@ -3,19 +3,19 @@
 
 import { useState, useEffect } from "react"
 import { ChevronLeft, ChevronRight, Calendar, ArrowRight, Filter, Github, ExternalLink } from "lucide-react"
-import { urlForImage } from "@/lib/sanity.image"
+import { urlFor as urlForImage } from "@ogutdgn/sanity-shared"
 import { ClipLoader } from "react-spinners"
 import FilterDropdown from "@/components/ui/filter-dropdown"
 
 interface Project {
   _id: string
   title: string
-  overview: string
-  image: any
-  technologies: string[]
-  projectType: string
-  mainCategory: string
-  tags: string[]
+  overview?: string
+  image?: any
+  technologies?: string[]
+  projectType?: string
+  mainCategory?: string
+  tags?: string[]
   githubLink?: string
   liveLink?: string
   publishedAt?: string

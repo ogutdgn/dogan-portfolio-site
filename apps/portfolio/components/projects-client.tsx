@@ -1,7 +1,7 @@
 "use client"
 
 import { useState, useMemo } from "react"
-import { urlForImage } from "@/lib/sanity.image"
+import { urlFor as urlForImage } from "@ogutdgn/sanity-shared"
 import { ArrowLeft, Search, Calendar, Filter, Github, ExternalLink } from "lucide-react"
 import FilterDropdown from "@/components/ui/filter-dropdown"
 import Footer from "@/components/footer"
@@ -42,12 +42,12 @@ interface Project {
   _id: string
   title: string
   slug: string
-  overview: string
-  image: any
-  technologies: string[]
-  projectType: string
-  mainCategory: string
-  tags: string[]
+  overview?: string
+  image?: any
+  technologies?: string[]
+  projectType?: string
+  mainCategory?: string
+  tags?: string[]
   githubLink?: string
   publishedAt?: string
   _createdAt: string
@@ -60,7 +60,7 @@ export default function ProjectsClient({ projects }: { projects: Project[] }) {
   const [activeTab, setActiveTab] = useState("projects")
 
   const categories = useMemo(() => {
-    const mainCategories = projects.map(project => project.mainCategory).filter(Boolean)
+    const mainCategories = projects.map(project => project.mainCategory).filter((c): c is string => Boolean(c))
     const uniqueCategories = Array.from(new Set(mainCategories))
     return ["All", ...uniqueCategories]
   }, [projects])
@@ -68,7 +68,7 @@ export default function ProjectsClient({ projects }: { projects: Project[] }) {
   const filteredProjects = projects.filter((project) => {
     const matchesSearch =
       project.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      project.overview.toLowerCase().includes(searchTerm.toLowerCase())
+      (project.overview ?? '').toLowerCase().includes(searchTerm.toLowerCase())
     const matchesCategory = selectedCategory === "All" || project.mainCategory === selectedCategory
     return matchesSearch && matchesCategory
   })

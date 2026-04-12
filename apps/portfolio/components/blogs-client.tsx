@@ -1,7 +1,7 @@
 "use client"
 
 import { useState, useMemo } from "react"
-import { urlForImage } from "@/lib/sanity.image"
+import { urlFor as urlForImage } from "@ogutdgn/sanity-shared"
 import { ArrowLeft, Search, Calendar, Clock, Filter } from "lucide-react"
 import FilterDropdown from "@/components/ui/filter-dropdown"
 import Footer from "@/components/footer"
@@ -41,13 +41,13 @@ function NavigationToggle({ activeTab, onTabChange }: NavigationToggleProps) {
 interface Blog {
   _id: string
   title: string
-  description: string
+  description?: string
   slug: string
-  publishedAt: string
-  readingTime: number
-  mainImage: any
-  mainCategory: string
-  tags: string[]
+  publishedAt?: string
+  readingTime?: number
+  mainImage?: any
+  mainCategory?: string
+  tags?: string[]
 }
 
 export default function BlogsClient({ blogs }: { blogs: Blog[] }) {
@@ -56,7 +56,7 @@ export default function BlogsClient({ blogs }: { blogs: Blog[] }) {
   const [activeTab, setActiveTab] = useState("blogs")
 
   const categories = useMemo(() => {
-    const mainCategories = blogs.map(blog => blog.mainCategory).filter(Boolean)
+    const mainCategories = blogs.map(blog => blog.mainCategory).filter((c): c is string => Boolean(c))
     const uniqueCategories = Array.from(new Set(mainCategories))
     return ["All", ...uniqueCategories]
   }, [blogs])

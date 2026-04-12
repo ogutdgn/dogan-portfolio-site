@@ -1,13 +1,11 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  eslint: {
-    ignoreDuringBuilds: true,
-  },
-  typescript: {
-    ignoreBuildErrors: true,
-  },
+  transpilePackages: ['@ogutdgn/sanity-shared'],
   images: {
     unoptimized: true,
+  },
+  experimental: {
+    cpus: 4,
   },
 }
 

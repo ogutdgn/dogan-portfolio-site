@@ -3,7 +3,7 @@
 import { ArrowLeft, Calendar, Clock, Share2 } from "lucide-react"
 import { PortableText } from '@portabletext/react'
 import { portableTextComponents } from '@/components/portable-text-components'
-import { urlForImage } from "@/lib/sanity.image"
+import { urlFor as urlForImage } from "@ogutdgn/sanity-shared"
 import Footer from "@/components/footer"
 
 export default function BlogDetailClient({ blog }: { blog: any }) {

@@ -1,7 +1,4 @@
-export const toast = ({ title, description }) => {
-  // In a real implementation, this would use a toast library or context
-  console.log(`Toast: ${title} - ${description}`)
-
+export const toast = ({ title, description }: { title?: string; description?: string }) => {
   // Create a temporary toast element
   const toastElement = document.createElement("div")
   toastElement.className = "fixed top-4 right-4 bg-background border rounded-md shadow-md p-4 max-w-md z-50"

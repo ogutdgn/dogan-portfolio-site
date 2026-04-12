@@ -4,8 +4,7 @@ import Link from "next/link";
 import { Suspense } from "react";
 import { ArrowLeft, Github, ExternalLink, Globe, Tag, Cpu } from "lucide-react";
 import { PortableText } from "@portabletext/react";
-import { getToolBySlug, getAllTools } from "@/lib/queries";
-import { urlFor } from "@/lib/sanity";
+import { getToolBySlug, getAllTools, urlFor } from "@ogutdgn/sanity-shared";
 import { getToolTypeMeta, STATUS_META } from "@/lib/utils";
 import { TOOL_COMPONENTS } from "./tools";
 

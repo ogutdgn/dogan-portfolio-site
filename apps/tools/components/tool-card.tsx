@@ -1,7 +1,7 @@
 "use client";
 
 import { Github, ExternalLink } from "lucide-react";
-import type { Tool } from "@/lib/types";
+import type { Tool } from "@ogutdgn/sanity-shared";
 import { getToolTypeMeta, getLiveLinkLabel, STATUS_META } from "@/lib/utils";
 
 function StatusDot({ status }: { status: string }) {

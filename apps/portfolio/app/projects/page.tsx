@@ -1,4 +1,4 @@
-import { getProjects } from "@/lib/sanity.queries"
+import { getProjects } from "@ogutdgn/sanity-shared"
 import ProjectsClient from "@/components/projects-client"
 
 export const revalidate = 0

@@ -3,7 +3,7 @@
 import { useEffect, useState, useRef } from "react";
 import { X, Github, ExternalLink } from "lucide-react";
 import { PortableText } from "@portabletext/react";
-import type { Tool } from "@/lib/types";
+import type { Tool } from "@ogutdgn/sanity-shared";
 import { getLiveLinkLabel } from "@/lib/utils";
 
 const portableTextComponents = {

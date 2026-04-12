@@ -1,5 +1,5 @@
-import { client } from "./sanity";
-import type { Tool, ToolCategory } from "./types";
+import { client } from '../client';
+import type { Tool, ToolCategory } from '../types';
 
 export async function getAllTools(): Promise<Tool[]> {
   return client.fetch(`

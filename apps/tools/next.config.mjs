@@ -1,5 +1,6 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  transpilePackages: ['@ogutdgn/sanity-shared'],
   images: {
     remotePatterns: [
       {

@@ -1,4 +1,4 @@
-import { getBlogBySlug } from "@/lib/sanity.queries"
+import { getBlogBySlug } from "@ogutdgn/sanity-shared"
 import BlogDetailClient from "@/components/blog-detail-client"
 import { notFound } from "next/navigation"
 

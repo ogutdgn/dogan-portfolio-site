@@ -1,7 +1,7 @@
 import { PortableTextComponents } from '@portabletext/react'
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter'
 import { tomorrow } from 'react-syntax-highlighter/dist/esm/styles/prism'
-import { urlForImage } from '@/lib/sanity.image'
+import { urlFor as urlForImage } from '@ogutdgn/sanity-shared'
 import { Copy, Check } from 'lucide-react'
 import { useState } from 'react'
 

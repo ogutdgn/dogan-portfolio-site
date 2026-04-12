@@ -1,4 +1,4 @@
-import { getBlogs } from "@/lib/sanity.queries"
+import { getBlogs } from "@ogutdgn/sanity-shared"
 import BlogsClient from "@/components/blogs-client"
 
 export const revalidate = 0

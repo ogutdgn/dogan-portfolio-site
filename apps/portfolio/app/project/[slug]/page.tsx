@@ -1,4 +1,4 @@
-import { getProject } from "@/lib/sanity.queries"
+import { getProject } from "@ogutdgn/sanity-shared"
 import ProjectDetailClient from "@/components/project-detail-client"
 import { notFound } from "next/navigation"
 

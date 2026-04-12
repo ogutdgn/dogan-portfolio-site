@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import type { Tool, ToolCategory } from "@/lib/types";
+import type { Tool, ToolCategory } from "@ogutdgn/sanity-shared";
 import { ToolCard } from "./tool-card";
 import { ToolDrawer } from "./tool-drawer";
 

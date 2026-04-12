@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { getAllCategories } from "@/lib/queries";
+import { getAllCategories } from "@ogutdgn/sanity-shared";
 
 export async function GET() {
   const categories = await getAllCategories();
