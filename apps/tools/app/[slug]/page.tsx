@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
@@ -9,6 +10,28 @@ import { getToolTypeMeta, STATUS_META } from "@/lib/utils";
 import { TOOL_COMPONENTS } from "./tools";
 
 export const revalidate = 3600;
+
+export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
+  const { slug } = await params;
+  const tool = await getToolBySlug(slug);
+  if (!tool) return {};
+
+  const imageUrl = tool.coverImage ? urlFor(tool.coverImage).width(1200).height(630).url() : undefined;
+
+  return {
+    title: `${tool.title} | tools.ogutdgn.com`,
+    description: tool.tagline ?? tool.overview,
+    openGraph: {
+      title: tool.title,
+      description: tool.tagline ?? tool.overview,
+      images: imageUrl ? [{ url: imageUrl, width: 1200, height: 630 }] : [],
+      type: 'website',
+    },
+    alternates: {
+      canonical: `https://tools.ogutdgn.com/${slug}`,
+    },
+  };
+}
 
 export async function generateStaticParams() {
   const tools = await getAllTools();
