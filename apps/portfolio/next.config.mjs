@@ -2,7 +2,7 @@
 const nextConfig = {
   transpilePackages: ['@ogutdgn/sanity-shared'],
   images: {
-    unoptimized: true,
+    remotePatterns: [{ protocol: 'https', hostname: 'cdn.sanity.io' }],
   },
   experimental: {
     cpus: 4,
