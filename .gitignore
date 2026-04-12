@@ -32,3 +32,6 @@ next-env.d.ts
 # Old site directories (no longer used)
 dogan-portfolio-site/
 tools-site/
+
+# Claude
+CLAUDE.md
