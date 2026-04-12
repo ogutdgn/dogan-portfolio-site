@@ -3,7 +3,7 @@ import type { Tool, ToolCategory } from '../types';
 
 export async function getAllTools(): Promise<Tool[]> {
   return client.fetch(`
-    *[_type == "tool" && defined(title) && defined(slug)] | order(featured desc, publishedAt desc) {
+    *[_type == "tool" && !(_id in path("drafts.**")) && defined(title) && defined(slug)] | order(featured desc, publishedAt desc) {
       _id, title, slug, tagline, overview,
       hostType, toolType, status, featured,
       icon, technologies, tags,
@@ -20,7 +20,7 @@ export async function getAllCategories(): Promise<ToolCategory[]> {
 
 export async function getToolBySlug(slug: string): Promise<Tool | null> {
   return client.fetch(`
-    *[_type == "tool" && slug.current == $slug][0] {
+    *[_type == "tool" && !(_id in path("drafts.**")) && slug.current == $slug][0] {
       _id, title, slug, tagline, overview,
       hostType, toolType, status, featured,
       icon, coverImage, screenshots, demoVideoUrl,

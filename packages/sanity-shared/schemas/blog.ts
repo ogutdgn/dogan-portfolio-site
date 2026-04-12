@@ -53,26 +53,8 @@ export const blog = defineType({
     defineField({
       name: 'mainCategory',
       title: 'Main Category',
-      type: 'string',
-      options: {
-        list: [
-          { title: 'Technology', value: 'technology' },
-          { title: 'AI & Machine Learning', value: 'ai-ml' },
-          { title: 'Automation', value: 'automation' },
-          { title: 'Backend', value: 'backend' },
-          { title: 'Web Development', value: 'web-development' },
-          { title: 'Mobile Development', value: 'mobile-development' },
-          { title: 'Data Science', value: 'data-science' },
-          { title: 'DevOps', value: 'devops' },
-          { title: 'Software Engineering', value: 'software-engineering' },
-          { title: 'Data Engineering', value: 'data-engineering' },
-          { title: 'Programming', value: 'programming' },
-          { title: 'Career', value: 'career' },
-          { title: 'Tutorial', value: 'tutorial' },
-          { title: 'Review', value: 'review' },
-          { title: 'Opinion', value: 'opinion' },
-        ],
-      },
+      type: 'reference',
+      to: [{ type: 'blogCategory' }],
       validation: (Rule) => Rule.required(),
     }),
     defineField({
@@ -80,6 +62,7 @@ export const blog = defineType({
       title: 'Tags',
       type: 'array',
       of: [{ type: 'string' }],
+      options: { layout: 'tags' },
       description: 'Tags for better categorization and similarity matching',
     }),
     defineField({

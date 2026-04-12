@@ -12,7 +12,7 @@ interface Blog {
   readingTime?: number
   mainImage?: any
   categories?: string[]
-  mainCategory?: string
+  mainCategory?: { _id: string; title: string; slug: { current: string } }
   tags?: string[]
   slug: string
 }
@@ -143,7 +143,7 @@ export default function Blogs({ blogs }: { blogs: Blog[] }) {
                           />
                           <div className="absolute top-4 left-4">
                             <span className="px-3 py-1 bg-primary text-primary-foreground text-xs rounded-full">
-                              {blog.mainCategory || blog.categories?.[0] || "Uncategorized"}
+                              {blog.mainCategory?.title || blog.categories?.[0] || "Uncategorized"}
                             </span>
                           </div>
                         </div>
@@ -209,7 +209,7 @@ export default function Blogs({ blogs }: { blogs: Blog[] }) {
                               />
                               <div className="absolute top-4 left-4">
                                 <span className="px-3 py-1 bg-primary text-primary-foreground text-xs rounded-full">
-                                  {blog.mainCategory || blog.categories?.[0] || "Uncategorized"}
+                                  {blog.mainCategory?.title || blog.categories?.[0] || "Uncategorized"}
                                 </span>
                               </div>
                             </div>
@@ -279,7 +279,7 @@ export default function Blogs({ blogs }: { blogs: Blog[] }) {
                             />
                             <div className="absolute top-4 left-4">
                               <span className="px-3 py-1 bg-primary text-primary-foreground text-xs rounded-full">
-                                {blog.mainCategory || blog.categories?.[0] || "Uncategorized"}
+                                {blog.mainCategory?.title || blog.categories?.[0] || "Uncategorized"}
                               </span>
                             </div>
                           </div>

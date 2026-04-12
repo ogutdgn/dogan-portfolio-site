@@ -25,6 +25,8 @@ export const project = defineType({
       name: 'overview',
       title: 'Overview',
       type: 'text',
+      description: 'Short description (max 500 chars)',
+      validation: (Rule) => Rule.max(500),
     }),
     defineField({
       name: 'image',
@@ -39,28 +41,13 @@ export const project = defineType({
       title: 'Technologies',
       type: 'array',
       of: [{ type: 'string' }],
+      options: { layout: 'tags' },
     }),
     defineField({
       name: 'mainCategory',
       title: 'Main Category',
-      type: 'string',
-      options: {
-        list: [
-          { title: 'Web Application', value: 'web-application' },
-          { title: 'Chrome Extension', value: 'chrome-extension' },
-          { title: 'Mobile Application', value: 'mobile-application' },
-          { title: 'Desktop Application', value: 'desktop-application' },
-          { title: 'AI/ML Project', value: 'ai-ml-project' },
-          { title: 'Data Science', value: 'data-science' },
-          { title: 'Game Development', value: 'game-development' },
-          { title: 'API/Backend', value: 'api-backend' },
-          { title: 'DevOps/Infrastructure', value: 'devops-infrastructure' },
-          { title: 'Open Source', value: 'open-source' },
-          { title: 'E-commerce', value: 'e-commerce' },
-          { title: 'Portfolio/Website', value: 'portfolio-website' },
-          { title: 'Tool/Utility', value: 'tool-utility' },
-        ],
-      },
+      type: 'reference',
+      to: [{ type: 'projectCategory' }],
       validation: (Rule) => Rule.required(),
     }),
     defineField({
@@ -68,6 +55,7 @@ export const project = defineType({
       title: 'Tags',
       type: 'array',
       of: [{ type: 'string' }],
+      options: { layout: 'tags' },
       description: 'Tags for better categorization and similarity matching',
     }),
     defineField({
@@ -90,6 +78,16 @@ export const project = defineType({
       name: 'projectType',
       title: 'Project Type',
       type: 'string',
+      options: {
+        list: [
+          { title: 'Personal', value: 'personal' },
+          { title: 'Professional', value: 'professional' },
+          { title: 'Freelance', value: 'freelance' },
+          { title: 'Open Source', value: 'open-source' },
+          { title: 'Academic', value: 'academic' },
+        ],
+        layout: 'radio',
+      },
     }),
     defineField({
       name: 'content',

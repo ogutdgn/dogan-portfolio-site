@@ -47,7 +47,7 @@ export default function BlogDetailClient({ blog }: { blog: any }) {
         <header className="mb-12">
           <div className="mb-6">
             <span className="px-3 py-1 bg-primary text-primary-foreground text-sm rounded-full">
-              {blog.mainCategory || "Uncategorized"}
+              {blog.mainCategory?.title || "Uncategorized"}
             </span>
           </div>
 

@@ -46,7 +46,7 @@ interface Project {
   image?: any
   technologies?: string[]
   projectType?: string
-  mainCategory?: string
+  mainCategory?: { _id: string; title: string; slug: { current: string } }
   tags?: string[]
   githubLink?: string
   publishedAt?: string
@@ -60,7 +60,7 @@ export default function ProjectsClient({ projects }: { projects: Project[] }) {
   const [activeTab, setActiveTab] = useState("projects")
 
   const categories = useMemo(() => {
-    const mainCategories = projects.map(project => project.mainCategory).filter((c): c is string => Boolean(c))
+    const mainCategories = projects.map(project => project.mainCategory?.title).filter((c): c is string => Boolean(c))
     const uniqueCategories = Array.from(new Set(mainCategories))
     return ["All", ...uniqueCategories]
   }, [projects])
@@ -69,7 +69,7 @@ export default function ProjectsClient({ projects }: { projects: Project[] }) {
     const matchesSearch =
       project.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
       (project.overview ?? '').toLowerCase().includes(searchTerm.toLowerCase())
-    const matchesCategory = selectedCategory === "All" || project.mainCategory === selectedCategory
+    const matchesCategory = selectedCategory === "All" || project.mainCategory?.title === selectedCategory
     return matchesSearch && matchesCategory
   })
 
@@ -162,7 +162,7 @@ export default function ProjectsClient({ projects }: { projects: Project[] }) {
                   />
                   <div className="absolute top-4 left-4">
                     <span className="px-3 py-1 bg-primary text-primary-foreground text-xs rounded-full">
-                      {project.mainCategory || project.projectType || "Project"}
+                      {project.mainCategory?.title || project.projectType || "Project"}
                     </span>
                   </div>
                 </div>

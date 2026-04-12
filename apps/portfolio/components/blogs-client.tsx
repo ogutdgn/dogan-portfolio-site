@@ -46,7 +46,7 @@ interface Blog {
   publishedAt?: string
   readingTime?: number
   mainImage?: any
-  mainCategory?: string
+  mainCategory?: { _id: string; title: string; slug: { current: string } }
   tags?: string[]
 }
 
@@ -56,14 +56,14 @@ export default function BlogsClient({ blogs }: { blogs: Blog[] }) {
   const [activeTab, setActiveTab] = useState("blogs")
 
   const categories = useMemo(() => {
-    const mainCategories = blogs.map(blog => blog.mainCategory).filter((c): c is string => Boolean(c))
+    const mainCategories = blogs.map(blog => blog.mainCategory?.title).filter((c): c is string => Boolean(c))
     const uniqueCategories = Array.from(new Set(mainCategories))
     return ["All", ...uniqueCategories]
   }, [blogs])
 
   const filteredBlogs = blogs.filter((blog) => {
     const matchesSearch = blog.title.toLowerCase().includes(searchTerm.toLowerCase())
-    const matchesCategory = selectedCategory === "All" || blog.mainCategory === selectedCategory
+    const matchesCategory = selectedCategory === "All" || blog.mainCategory?.title === selectedCategory
     return matchesSearch && matchesCategory
   })
 
@@ -157,7 +157,7 @@ export default function BlogsClient({ blogs }: { blogs: Blog[] }) {
                   />
                   <div className="absolute top-4 left-4">
                     <span className="px-3 py-1 bg-primary text-primary-foreground text-xs rounded-full">
-                      {blog.mainCategory || "Uncategorized"}
+                      {blog.mainCategory?.title || "Uncategorized"}
                     </span>
                   </div>
                 </div>

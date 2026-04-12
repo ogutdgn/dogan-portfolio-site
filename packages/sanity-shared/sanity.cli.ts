@@ -5,5 +5,5 @@ export default defineCliConfig({
     projectId: 'ru03qs5h',
     dataset: 'portfolio',
   },
-  deployment: { autoUpdates: true },
+  deployment: { autoUpdates: true, appId: 'hpf2g3u9qm4ssu8namkwrmoa' },
 });

@@ -1,10 +1,12 @@
 import { groq } from 'next-sanity';
 import { client } from '../client';
-import type { Project, Blog } from '../types';
+import type { Project, Blog, BlogCategory, ProjectCategory } from '../types';
+
+const CATEGORY_PROJECTION = `{ _id, title, "slug": slug.current }`;
 
 // Projects
 export async function getProjects(): Promise<Project[]> {
-  return client.fetch(groq`*[_type == "project"] {
+  return client.fetch(groq`*[_type == "project" && !(_id in path("drafts.**"))] {
     _id,
     title,
     "slug": slug.current,
@@ -12,7 +14,7 @@ export async function getProjects(): Promise<Project[]> {
     image,
     technologies,
     projectType,
-    mainCategory,
+    "mainCategory": mainCategory->${CATEGORY_PROJECTION},
     tags,
     githubLink,
     liveLink,
@@ -22,7 +24,7 @@ export async function getProjects(): Promise<Project[]> {
 }
 
 export async function getProject(slug: string): Promise<Project | null> {
-  return client.fetch(groq`*[_type == "project" && slug.current == $slug][0] {
+  return client.fetch(groq`*[_type == "project" && !(_id in path("drafts.**")) && slug.current == $slug][0] {
     _id,
     title,
     "slug": slug.current,
@@ -30,7 +32,7 @@ export async function getProject(slug: string): Promise<Project | null> {
     image,
     technologies,
     projectType,
-    mainCategory,
+    "mainCategory": mainCategory->${CATEGORY_PROJECTION},
     tags,
     githubLink,
     liveLink,
@@ -41,15 +43,15 @@ export async function getProject(slug: string): Promise<Project | null> {
   }`, { slug });
 }
 
-export async function getSimilarProjects(currentProjectId: string, mainCategory?: string, tags: string[] = []): Promise<Project[]> {
-  const projects = await client.fetch<Project[]>(groq`*[_type == "project" && _id != $currentProjectId] {
+export async function getSimilarProjects(currentProjectId: string, mainCategory?: ProjectCategory, tags: string[] = []): Promise<Project[]> {
+  const projects = await client.fetch<Project[]>(groq`*[_type == "project" && !(_id in path("drafts.**")) && _id != $currentProjectId] {
     _id,
     title,
     "slug": slug.current,
     overview,
     image,
     technologies,
-    mainCategory,
+    "mainCategory": mainCategory->${CATEGORY_PROJECTION},
     tags,
     githubLink,
     liveLink,
@@ -60,7 +62,7 @@ export async function getSimilarProjects(currentProjectId: string, mainCategory?
   return projects
     .map((project) => {
       let score = 0;
-      if (project.mainCategory === mainCategory) score += 10;
+      if (mainCategory && project.mainCategory?._id === mainCategory._id) score += 10;
       score += (tags.filter(tag => project.tags?.includes(tag)).length) * 3;
       score += (tags.filter(tag => project.technologies?.includes(tag)).length) * 2;
       return { ...project, similarityScore: score };
@@ -71,7 +73,7 @@ export async function getSimilarProjects(currentProjectId: string, mainCategory?
 
 // Blogs
 export async function getBlogs(): Promise<Blog[]> {
-  return client.fetch(groq`*[_type == "blog"] {
+  return client.fetch(groq`*[_type == "blog" && !(_id in path("drafts.**"))] {
     _id,
     title,
     "slug": slug.current,
@@ -79,21 +81,21 @@ export async function getBlogs(): Promise<Blog[]> {
     description,
     readingTime,
     mainImage,
-    mainCategory,
+    "mainCategory": mainCategory->${CATEGORY_PROJECTION},
     tags,
     _createdAt
   } | order(publishedAt desc)`);
 }
 
 export async function getBlogBySlug(slug: string): Promise<Blog | null> {
-  return client.fetch(groq`*[_type == "blog" && slug.current == $slug][0] {
+  return client.fetch(groq`*[_type == "blog" && !(_id in path("drafts.**")) && slug.current == $slug][0] {
     _id,
     title,
     "slug": slug.current,
     publishedAt,
     readingTime,
     mainImage,
-    mainCategory,
+    "mainCategory": mainCategory->${CATEGORY_PROJECTION},
     tags,
     content,
     body,
@@ -102,14 +104,14 @@ export async function getBlogBySlug(slug: string): Promise<Blog | null> {
   }`, { slug });
 }
 
-export async function getSimilarBlogs(currentBlogId: string, mainCategory?: string, tags: string[] = []): Promise<Blog[]> {
-  const blogs = await client.fetch<Blog[]>(groq`*[_type == "blog" && _id != $currentBlogId] {
+export async function getSimilarBlogs(currentBlogId: string, mainCategory?: BlogCategory, tags: string[] = []): Promise<Blog[]> {
+  const blogs = await client.fetch<Blog[]>(groq`*[_type == "blog" && !(_id in path("drafts.**")) && _id != $currentBlogId] {
     _id,
     title,
     "slug": slug.current,
     publishedAt,
     mainImage,
-    mainCategory,
+    "mainCategory": mainCategory->${CATEGORY_PROJECTION},
     tags,
     _createdAt
   } | order(publishedAt desc)`, { currentBlogId });
@@ -117,7 +119,7 @@ export async function getSimilarBlogs(currentBlogId: string, mainCategory?: stri
   return blogs
     .map((blog) => {
       let score = 0;
-      if (blog.mainCategory === mainCategory) score += 10;
+      if (mainCategory && blog.mainCategory?._id === mainCategory._id) score += 10;
       score += (tags.filter(tag => blog.tags?.includes(tag)).length) * 3;
       return { ...blog, similarityScore: score };
     })

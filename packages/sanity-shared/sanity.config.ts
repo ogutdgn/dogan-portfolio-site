@@ -17,12 +17,40 @@ export default defineConfig({
           .items([
             S.listItem()
               .title('Projects')
-              .schemaType('project')
-              .child(S.documentTypeList('project').title('Projects')),
+              .child(
+                S.list()
+                  .title('Projects')
+                  .items([
+                    S.listItem()
+                      .title('All Projects')
+                      .schemaType('project')
+                      .child(S.documentTypeList('project').title('All Projects')),
+                    orderableDocumentListDeskItem({
+                      type: 'projectCategory',
+                      title: 'Categories',
+                      S,
+                      context,
+                    }),
+                  ])
+              ),
             S.listItem()
               .title('Blogs')
-              .schemaType('blog')
-              .child(S.documentTypeList('blog').title('Blogs')),
+              .child(
+                S.list()
+                  .title('Blogs')
+                  .items([
+                    S.listItem()
+                      .title('All Blogs')
+                      .schemaType('blog')
+                      .child(S.documentTypeList('blog').title('All Blogs')),
+                    orderableDocumentListDeskItem({
+                      type: 'blogCategory',
+                      title: 'Categories',
+                      S,
+                      context,
+                    }),
+                  ])
+              ),
             S.divider(),
             S.listItem()
               .title('Tools')

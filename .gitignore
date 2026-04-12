@@ -9,6 +9,7 @@ node_modules/
 out/
 dist/
 build/
+.sanity/
 
 # Env files
 .env

@@ -8,6 +8,18 @@ export interface ToolCategory {
   slug: { current: string };
 }
 
+export interface BlogCategory {
+  _id: string;
+  title: string;
+  slug: { current: string };
+}
+
+export interface ProjectCategory {
+  _id: string;
+  title: string;
+  slug: { current: string };
+}
+
 export interface Tool {
   _id: string;
   title: string;
@@ -39,7 +51,7 @@ export interface Blog {
   description?: string;
   readingTime?: number;
   mainImage?: { asset: { _ref: string } };
-  mainCategory?: string;
+  mainCategory?: BlogCategory;
   tags?: string[];
   content?: unknown[];
   _createdAt: string;
@@ -53,7 +65,7 @@ export interface Project {
   image?: { asset: { _ref: string } };
   technologies?: string[];
   projectType?: string;
-  mainCategory?: string;
+  mainCategory?: ProjectCategory;
   tags?: string[];
   githubLink?: string;
   liveLink?: string;

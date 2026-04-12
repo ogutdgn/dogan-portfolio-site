@@ -12,7 +12,7 @@ interface Project {
   image?: any
   technologies?: string[]
   projectType?: string
-  mainCategory?: string
+  mainCategory?: { _id: string; title: string; slug: { current: string } }
   tags?: string[]
   githubLink?: string
   liveLink?: string
@@ -140,7 +140,7 @@ export default function Projects({ projects }: { projects: Project[] }) {
                           />
                           <div className="absolute top-4 left-4">
                             <span className="px-3 py-1 bg-primary text-primary-foreground text-xs rounded-full">
-                              {project.mainCategory || project.projectType || "Project"}
+                              {project.mainCategory?.title || project.projectType || "Project"}
                             </span>
                           </div>
                         </div>
@@ -228,7 +228,7 @@ export default function Projects({ projects }: { projects: Project[] }) {
                               />
                               <div className="absolute top-4 left-4">
                                 <span className="px-3 py-1 bg-primary text-primary-foreground text-xs rounded-full">
-                                  {project.mainCategory || project.projectType || "Project"}
+                                  {project.mainCategory?.title || project.projectType || "Project"}
                                 </span>
                               </div>
                             </div>
@@ -320,7 +320,7 @@ export default function Projects({ projects }: { projects: Project[] }) {
                             />
                             <div className="absolute top-4 left-4">
                               <span className="px-3 py-1 bg-primary text-primary-foreground text-xs rounded-full">
-                                {project.mainCategory || project.projectType || "Project"}
+                                {project.mainCategory?.title || project.projectType || "Project"}
                               </span>
                             </div>
                           </div>
