@@ -59,8 +59,9 @@ const portableTextComponents = {
   },
 };
 
-export default async function ToolPage({ params }: { params: { slug: string } }) {
-  const tool = await getToolBySlug(params.slug);
+export default async function ToolPage({ params }: { params: Promise<{ slug: string }> }) {
+  const { slug } = await params;
+  const tool = await getToolBySlug(slug);
   if (!tool) notFound();
 
   const typeMeta = getToolTypeMeta(tool.toolType);
