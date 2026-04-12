@@ -5,12 +5,18 @@ import "./globals.css";
 import { Navbar } from "@/components/navbar";
 
 export const metadata: Metadata = {
+  metadataBase: new URL('https://tools.ogutdgn.com'),
   title: "tools.ogutdgn",
   description: "A collection of tools built by Dogan Ogut",
   openGraph: {
+    siteName: "tools.ogutdgn",
     title: "tools.ogutdgn",
     description: "A collection of tools built by Dogan Ogut",
     url: "https://tools.ogutdgn.com",
+    type: "website",
+  },
+  alternates: {
+    canonical: "https://tools.ogutdgn.com",
   },
 };
 

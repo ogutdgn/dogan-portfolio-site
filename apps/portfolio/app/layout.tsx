@@ -8,8 +8,13 @@ import { ThemeProvider } from "@/components/theme-provider"
 const inter = Inter({ subsets: ["latin"] })
 
 export const metadata: Metadata = {
+  metadataBase: new URL('https://ogutdgn.com'),
   title: "Dogan Ogut | Portfolio",
   description: "Professional portfolio of Dogan Ogut - Software Developer",
+  openGraph: {
+    siteName: "Dogan Ogut",
+    type: "website",
+  },
   icons: {
     icon: '/favicon.svg',
     apple: '/favicon.svg',

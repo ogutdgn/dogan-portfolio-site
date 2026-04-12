@@ -15,6 +15,15 @@ export const revalidate = 3600
 export const metadata: Metadata = {
   title: "Dogan Ogut | Portfolio",
   description: "Professional portfolio of Dogan Ogut - Software Developer",
+  openGraph: {
+    title: "Dogan Ogut | Portfolio",
+    description: "Professional portfolio of Dogan Ogut - Software Developer",
+    url: "https://ogutdgn.com",
+    type: "website",
+  },
+  alternates: {
+    canonical: "https://ogutdgn.com",
+  },
 }
 
 export default async function Home() {
