@@ -32,5 +32,39 @@ export default async function BlogDetailPage({ params }: { params: Promise<{ slu
   const { slug } = await params
   const blog = await getBlogBySlug(slug)
   if (!blog) notFound()
-  return <BlogDetailClient blog={blog} />
+
+  const imageUrl = blog.mainImage ? urlFor(blog.mainImage).width(1200).height(630).url() : undefined
+
+  const jsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'Article',
+    headline: blog.title,
+    description: blog.description,
+    datePublished: blog.publishedAt,
+    image: imageUrl,
+    author: {
+      '@type': 'Person',
+      name: 'Dogan Ogut',
+      url: 'https://ogutdgn.com',
+    },
+    publisher: {
+      '@type': 'Person',
+      name: 'Dogan Ogut',
+      url: 'https://ogutdgn.com',
+    },
+    mainEntityOfPage: {
+      '@type': 'WebPage',
+      '@id': `https://ogutdgn.com/blog/${slug}`,
+    },
+  }
+
+  return (
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
+      <BlogDetailClient blog={blog} />
+    </>
+  )
 }
