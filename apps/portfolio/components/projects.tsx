@@ -1,10 +1,8 @@
 "use client"
 
-
 import { useState, useEffect } from "react"
 import { ChevronLeft, ChevronRight, Calendar, ArrowRight, Filter, Github, ExternalLink } from "lucide-react"
 import { urlFor as urlForImage } from "@ogutdgn/sanity-shared"
-import { ClipLoader } from "react-spinners"
 import FilterDropdown from "@/components/ui/filter-dropdown"
 
 interface Project {
@@ -23,29 +21,15 @@ interface Project {
   slug: string
 }
 
-export default function Projects() {
+export default function Projects({ projects }: { projects: Project[] }) {
 
   const [currentIndex, setCurrentIndex] = useState(0)
   const [isTransitioning, setIsTransitioning] = useState(false)
   const [isMounted, setIsMounted] = useState(false)
   const [isMobile, setIsMobile] = useState(false)
-  const [projects, setProjects] = useState<Project[]>([])
-  const [loading, setLoading] = useState(true)
 
   useEffect(() => {
     setIsMounted(true)
-    async function fetchProjects() {
-      try {
-        const res = await fetch('/api/projects')
-        const data = await res.json()
-        setProjects(data)
-      } catch (err) {
-        // Error handling
-      } finally {
-        setLoading(false)
-      }
-    }
-    fetchProjects()
   }, [])
 
 
@@ -116,9 +100,6 @@ export default function Projects() {
     return () => window.removeEventListener('resize', checkMobile)
   }, [])
   
-  const visibleProjects = projects.length > 0 ? projects : []
-
-
   return (
     <section id="projects" className="py-20 bg-muted/30">
       <div className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-12">
@@ -128,13 +109,7 @@ export default function Projects() {
         </div>
 
         <div className="relative">
-          {loading ? (
-            <div className="text-center py-12">
-              <div className="flex justify-center">
-                <ClipLoader color="#6366f1" size={60} speedMultiplier={0.8} />
-              </div>
-            </div>
-          ) : projects.length === 0 ? (
+          {projects.length === 0 ? (
             <div className="text-center py-12">
               <p className="text-muted-foreground text-lg">There are no projects available at the moment.</p>
             </div>

@@ -3,7 +3,6 @@
 import { useState, useEffect } from "react"
 import { ChevronLeft, ChevronRight, Calendar, Clock, ArrowRight } from "lucide-react"
 import { urlFor as urlForImage } from "@ogutdgn/sanity-shared"
-import { ClipLoader } from "react-spinners"
 
 interface Blog {
   _id: string
@@ -18,29 +17,15 @@ interface Blog {
   slug: string
 }
 
-export default function Blogs() {
+export default function Blogs({ blogs }: { blogs: Blog[] }) {
 
   const [currentIndex, setCurrentIndex] = useState(0)
   const [isTransitioning, setIsTransitioning] = useState(false)
   const [isMounted, setIsMounted] = useState(false)
   const [isMobile, setIsMobile] = useState(false)
-  const [blogs, setBlogs] = useState<Blog[]>([])
-  const [loading, setLoading] = useState(true)
 
   useEffect(() => {
     setIsMounted(true)
-    async function fetchBlogs() {
-      try {
-        const res = await fetch('/api/blogs')
-        const data = await res.json()
-        setBlogs(data)
-      } catch (err) {
-        // Error handling
-      } finally {
-        setLoading(false)
-      }
-    }
-    fetchBlogs()
   }, [])
 
   useEffect(() => {
@@ -118,9 +103,6 @@ export default function Blogs() {
   }
 
 
-  const visibleBlogs = blogs.length > 0 ? blogs : []
-
-
   return (
     <section id="blogs" className="py-20">
       <div className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-12">
@@ -130,13 +112,7 @@ export default function Blogs() {
         </div>
 
         <div className="relative">
-          {loading ? (
-            <div className="text-center py-12">
-              <div className="flex justify-center">
-                <ClipLoader color="#6366f1" size={60} speedMultiplier={0.8} />
-              </div>
-            </div>
-          ) : blogs.length === 0 ? (
+          {blogs.length === 0 ? (
             <div className="text-center py-12">
               <p className="text-muted-foreground text-lg">There are no blogs available at the moment.</p>
             </div>

@@ -8,7 +8,7 @@ import { getToolBySlug, getAllTools, urlFor } from "@ogutdgn/sanity-shared";
 import { getToolTypeMeta, STATUS_META } from "@/lib/utils";
 import { TOOL_COMPONENTS } from "./tools";
 
-export const revalidate = 30;
+export const revalidate = 3600;
 
 export async function generateStaticParams() {
   const tools = await getAllTools();

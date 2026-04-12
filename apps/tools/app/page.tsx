@@ -1,4 +1,4 @@
-export const revalidate = 30;
+export const revalidate = 3600;
 
 import Image from "next/image";
 import { FilterBar } from "@/components/filter-bar";

@@ -8,13 +8,18 @@ import Contact from "../components/contact"
 import Footer from "../components/footer"
 import Navbar from "../components/navbar"
 import Education from "../components/education"
+import { getProjects, getBlogs } from "@ogutdgn/sanity-shared"
+
+export const revalidate = 3600
 
 export const metadata: Metadata = {
   title: "Dogan Ogut | Portfolio",
   description: "Professional portfolio of Dogan Ogut - Software Developer",
 }
 
-export default function Home() {
+export default async function Home() {
+  const [projects, blogs] = await Promise.all([getProjects(), getBlogs()])
+
   return (
     <div className="min-h-screen bg-background">
       <Navbar />
@@ -23,8 +28,8 @@ export default function Home() {
         <About />
         <Education />
         <TechStack />
-        <Projects />
-        <Blogs />
+        <Projects projects={projects} />
+        <Blogs blogs={blogs} />
         <Contact />
       </main>
       <Footer />
