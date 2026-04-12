@@ -3,9 +3,10 @@ import { getProject } from '@/lib/sanity.queries';
 
 export const dynamic = 'force-dynamic';
 
-export async function GET(request: Request, { params }: { params: { slug: string } }) {
+export async function GET(request: Request, { params }: { params: Promise<{ slug: string }> }) {
   try {
-    const project = await getProject(params.slug);
+    const { slug } = await params;
+    const project = await getProject(slug);
     if (!project) return NextResponse.json(null, { status: 404 });
     return NextResponse.json(project);
   } catch (error) {
