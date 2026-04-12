@@ -182,9 +182,6 @@ importers:
       sonner:
         specifier: ^1.7.1
         version: 1.7.4(react-dom@19.2.5(react@19.2.5))(react@19.2.5)
-      styled-components:
-        specifier: ^6.1.19
-        version: 6.4.0(react-dom@19.2.5(react@19.2.5))(react@19.2.5)
       tailwind-merge:
         specifier: ^2.5.5
         version: 2.6.1
@@ -243,12 +240,6 @@ importers:
       react-dom:
         specifier: ^19
         version: 19.2.5(react@19.2.5)
-      react-is:
-        specifier: ^19.2.4
-        version: 19.2.5
-      styled-components:
-        specifier: ^6.3.12
-        version: 6.4.0(react-dom@19.2.5(react@19.2.5))(react@19.2.5)
     devDependencies:
       '@types/node':
         specifier: ^22

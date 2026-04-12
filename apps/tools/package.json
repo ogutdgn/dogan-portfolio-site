@@ -16,9 +16,7 @@
     "next": "16.2.3",
     "next-sanity": "^12.2.2",
     "react": "^19",
-    "react-dom": "^19",
-    "react-is": "^19.2.4",
-    "styled-components": "^6.3.12"
+    "react-dom": "^19"
   },
   "devDependencies": {
     "@types/node": "^22",
