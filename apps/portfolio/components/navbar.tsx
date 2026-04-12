@@ -7,6 +7,7 @@ interface NavLink {
   name: string
   href: string
   external?: boolean
+  button?: boolean
 }
 
 export default function Navbar() {
@@ -91,12 +92,11 @@ export default function Navbar() {
   const navLinks: NavLink[] = [
     { name: "Home", href: "home" },
     { name: "About", href: "about" },
-    { name: "Education", href: "education" },
-    { name: "Tech Stack", href: "tech-stack" },
     { name: "Projects", href: "projects" },
     { name: "Blogs", href: "blogs" },
     { name: "Contact", href: "contact" },
-    { name: "Resume", href: "/dogan-ogut-resume.pdf", external: true },
+    { name: "Tools", href: "https://tools.ogutdgn.com", external: true },
+    { name: "Resume", href: "/dogan-ogut-resume.pdf", external: true, button: true },
   ]
 
   const socialLinks = [
@@ -119,16 +119,13 @@ export default function Navbar() {
 
             <nav className="hidden lg:flex items-center space-x-8">
               {navLinks.map((link) => (
-                <button
+                <span
                   key={link.name}
-                  className="text-muted-foreground hover:text-foreground transition-colors whitespace-nowrap"
+                  className="text-muted-foreground whitespace-nowrap"
                 >
                   {link.name}
-                </button>
+                </span>
               ))}
-              <button className="bg-primary text-primary-foreground px-4 py-2 rounded-md hover:bg-primary/90 transition-colors whitespace-nowrap">
-                Resume
-              </button>
             </nav>
 
             <button className="lg:hidden p-2 hover:bg-muted rounded-md transition-colors">
@@ -157,7 +154,7 @@ export default function Navbar() {
 
           <nav className="hidden lg:flex items-center space-x-8">
             {navLinks.map((link) => {
-              if (link.external) {
+              if (link.external && link.button) {
                 return (
                   <a
                     key={link.name}
@@ -165,6 +162,19 @@ export default function Navbar() {
                     target="_blank"
                     rel="noopener noreferrer"
                     className="bg-primary text-primary-foreground px-4 py-2 rounded-md hover:bg-primary/90 transition-colors whitespace-nowrap"
+                  >
+                    {link.name}
+                  </a>
+                )
+              }
+              if (link.external) {
+                return (
+                  <a
+                    key={link.name}
+                    href={link.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-muted-foreground hover:text-foreground transition-colors whitespace-nowrap"
                   >
                     {link.name}
                   </a>
@@ -214,7 +224,7 @@ export default function Navbar() {
                 <nav className="flex-1 p-6 bg-background">
                   <div className="space-y-2">
                     {navLinks.map((link, index) => {
-                      if (link.external) {
+                      if (link.external && link.button) {
                         return (
                           <a
                             key={link.name}
@@ -223,6 +233,25 @@ export default function Navbar() {
                             rel="noopener noreferrer"
                             onClick={closeMenu}
                             className={`block w-full mt-6 bg-primary text-primary-foreground px-4 py-3 rounded-lg hover:bg-primary/90 transition-all duration-300 text-lg font-medium transform text-center ${
+                              isOpen ? "translate-x-0 opacity-100" : "translate-x-8 opacity-0"
+                            }`}
+                            style={{
+                              transitionDelay: isOpen ? `${index * 50 + 200}ms` : "0ms",
+                            }}
+                          >
+                            {link.name}
+                          </a>
+                        )
+                      }
+                      if (link.external) {
+                        return (
+                          <a
+                            key={link.name}
+                            href={link.href}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            onClick={closeMenu}
+                            className={`block w-full text-left py-4 px-4 rounded-lg text-muted-foreground hover:text-foreground hover:bg-muted transition-all duration-300 text-lg transform ${
                               isOpen ? "translate-x-0 opacity-100" : "translate-x-8 opacity-0"
                             }`}
                             style={{
